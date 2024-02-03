@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Management System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/dashboard.css' %}">
+</head>
+<body>
+    <a href="{% url 't_dashboard' user=teacher_instance.id %}"></a>
+     <nav class="navbar">
+        <picture class="logoContainer">
+            <img src="/media/collegeLogo.png" alt="logo">
+        </picture>
+        <div class="searchContainer">
+            <input type="text" placeholder="Search...">
+            <button class="search_button">
+            </button>
+        </div>
+        <div class="userProfileContainer" onclick="showProfileOptions()">
+            <img src="{{teacher_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{teacher_instance.name}}</div>
+            <div class="profileOptions">
+                <ul>
+                    <li>
+                        <a href="#">Account</a>
+                    </li>
+                    <li>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="main-content">
+        <header>
+            <h1> College Management System</h1>
+        </header>
+
+        <section id="content">
+            <h2>Systems</h2>
+            <ul>
+                <li><a href="{% url 'teacher_view' teacher_instance.id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
+                <li><a href="{% url 'c_canteen' teacher_instance.id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> Library Management System</a></li>
+                <li><a href="#"><i class="fas fa-user-check"></i> Attendance Management System</a></li>
+                <li><a href="#"><i class="fas fa-money-bill-alt"></i> Account Management System</a></li>
+                <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Faculty Management System</a></li>
+                <!-- Add more department links as needed -->
+            </ul>
+        </section>
+    </div>
+
+    <!-- Notice Board -->
+    <div id="notice-board">
+        <h2>Important Notice</h2>
+        <p>This is a placeholder for important notices and announcements. Please check regularly for updates.</p>
+    </div>
+
+
+</body>
+</html>
+
+

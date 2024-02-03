@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'canteen/css/s_canteen.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
+
+    <title>Orders</title>
+    <style>
+    .orders{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 5px;
+    background-color: #a7b9c6;
+    width:40%;
+    border-radius: 10%;
+    height: 200px;
+    align-items: center;
+    justify-content: space-around;
+    }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <picture class="logoContainer"> 
+             <!-- college ko logo -->
+            <img src="/media/" alt="logo">
+        </picture>
+        <div class="searchContainer">
+            <input type="text" placeholder="Search...">
+            <!-- <button class="search_button"> -->
+            </button>
+        </div>
+        <div class="userProfileContainer" onclick="showProfileOptions()">
+             <!-- profile picture -->
+            <img src="/media/profile.jpeg" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">Prachi Shiwakoti</div>
+            <div class="profileOptions">
+                <ul>
+                    <li>
+                        <a href="#">Account</a>
+                    </li>
+                    <li>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <aside class="aside">
+        <ul class="pageLinks">
+            <li class="pageLink">
+                <a href="{% url 's_student' admin_instance.id %}">Menu</a>
+            </li>
+            <li class="pageLink">
+                <a class="activePage" href="{% url 'orders' user=admin_instance.id %}">Orders</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Sales</a>
+            </li>
+          
+        </ul>
+        <div class="contactInfo">
+            <dl>
+                <dt>P.O.Box:</dt>
+                <dd>3928, Kalimati, Kathmandu</dd>
+            
+                <dt>Email:</dt>
+                <dd><a href="mailto:info@kecktm.edu.np">info@kecktm.edu.np</a></dd>
+            
+                <dt>Contact:</dt>
+                <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
+            </dl>
+        </div>
+    </aside>
+    <main class="main">
+        <div class="top">
+            <h2>CANTEEN</h2>
+            <div class="notice">
+            <div class="notification" onclick="togglenoti()">
+                <img height="40px" width="40px" src="/media/bell.png" alt=""><span class="span" >2</span>
+            </div>
+                <div class="not-box" id="batta">
+                    <div class="text">
+                        Lorem ipsum dolor sit amet 
+                    </div>
+                    <div class="text">
+                        Lorem ipsum dolor sit amet 
+                    </div>
+                    <div class="text">
+                        Lorem ipsum dolor sit amet
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="orders" id="displayOrder">
+            <div>Name: {{order_instance.name}}</div>
+            <div>Item: {{iorder_instance.item}}</div>
+            <div>Quantity:{{order_instance.quantity}}</div>
+            <div>Total:{{order_instance.totalPrice}}</div>
+            <div>
+                <button>Confirm Order</button>
+                <button>Reject Order</button>
+            </div>
+        </div>
+
+    </main>
+    <script src="./script.js"></script>
+</body>
+</html>

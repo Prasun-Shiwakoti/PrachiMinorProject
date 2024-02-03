@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Staff</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'canteen/css/s_canteen.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
+</head>
+<body>
+    <nav class="navbar">
+        <picture class="logoContainer"> 
+            <img src="/media/collegeLogo.png/" alt="logo">
+        </picture>
+        <div class="searchContainer">
+            <input type="text" placeholder="Search...">
+            <!-- <button class="search_button"> -->
+            </button>
+        </div>
+        <div class="userProfileContainer" onclick="showProfileOptions()">
+            <img src="{{admin_instance.profile_pics}}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
+            <div class="profileOptions">
+                <ul>
+                    <li>
+                        <a href="#">Account</a>
+                    </li>
+                    <li>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <aside class="aside">
+        <ul class="pageLinks">
+            <li class="pageLink">
+                <a class="activePage" href="{% url 'c_canteen' user=admin_instance.id %}">Menu</a>
+            </li>
+            <li class="pageLink">
+                <a href="{% url 'orders' admin_instance.id %}">Orders</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Sales</a>
+            </li>
+          
+        </ul>
+        <div class="contactInfo">
+            <dl>
+                <dt>P.O.Box:</dt>
+                <dd>3928, Kalimati, Kathmandu</dd>
+            
+                <dt>Email:</dt>
+                <dd><a href="mailto:info@kecktm.edu.np">info@kecktm.edu.np</a></dd>
+            
+                <dt>Contact:</dt>
+                <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
+            </dl>
+        </div>
+    </aside>
+    <main class="main">
+        <div class="top">
+            <h2>CANTEEN</h2>
+            <div class="notice">
+            <div class="notification" onclick="togglenoti()">
+                 <!-- notification bell ko photo-->
+                <img height="40px" width="40px" src="/media/bell.png" alt=""><span class="span" >2</span>
+            </div>
+                <div class="not-box" id="batta">
+                    <div class="text">
+                        Lorem ipsum dolor sit amet 
+                    </div>
+                    <div class="text">
+                        Lorem ipsum dolor sit amet 
+                    </div>
+                    <div class="text">
+                        Lorem ipsum dolor sit amet
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="menu special">
+            <div class="title">
+                <h3>Today's Special</h3>
+            </div>
+            <div class="itemsContainer" id="menuItemsContainer">
+                <div class="item">
+                     <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                   <!-- samosa ko photo -->
+
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+    
+            </div>
+            <div class="menu-change"><h3>Add Special Items</h3>
+                <label for="itemName">Item Name:</label>
+                <input type="text" id="itemName">
+                <label for="itemPrice">Item Price :</label>
+                <input type="number" id="itemPrice">
+                <input type="file" id="itemImageInput" accept="image/*">
+                <button onclick="addItem()">Add Item</button>
+        </div>
+        </section>
+        <section class="menu">
+            <div class="title">
+                <h3>Menu</h3>
+            </div>
+            <div class="itemsContainer" id="menus">
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                </div>
+            </div>
+            <div class="menu-change"><h3>Add Menu Items</h3>
+                <label for="itemsName">Item Name:</label>
+                <input type="text" id="itemsName">
+                <label for="itemsPrice">Item Price :</label>
+                <input type="number" id="itemsPrice">
+                <input type="file" id="itemsImageInput" accept="image/*">
+                <button onclick="addItems()">Add Item</button>
+        </div>
+        </section>
+    </main>
+        
+    <script src="{% static 'canteen/js/s_canteen.js' %}"></script>
+</body>
+</html>
