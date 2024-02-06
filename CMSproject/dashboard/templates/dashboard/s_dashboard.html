@@ -8,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/dashboard.css' %}">
 </head>
 <body>
-    <a href="{% url 's_dashboard' user=student_instance.id %}"></a>
+    {% if user_type == 'student' %}
+    <a href="{% url 's_dashboard' user=student_instance.student_id %}"></a>
+    {% elif user_type == 'teacher' %}
+    <a href="{% url 's_dashboard' user=teacher_instance.teacher_id %}"></a>
+    {% endif %}
      <nav class="navbar">
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
@@ -19,8 +23,13 @@
             </button>
         </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
+            {% if user_type == 'student' %}
             <img src="{{ student_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{student_instance.name}}</div>
+            {% elif user_type == 'teacher' %}
+            <img src="{{teacher_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{teacher_instance.name}}</div>
+            {% endif %}
             <div class="profileOptions">
                 <ul>
                     <li>
@@ -48,8 +57,13 @@
         <section id="content">
             <h2>Systems</h2>
             <ul>
-                <li><a href="{% url 'student_view' student_instance.id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
-                <li><a href="{% url 'c_canteen' student_instance.id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                {% if user_type == 'student' %}
+                <li><a href="{% url 'student_view' student_instance.student_id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
+                <li><a href="{% url 'c_canteen' student_instance.student_id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                {% elif user_type == 'teacher' %}
+                <li><a href="{% url 'teacher_view' teacher_instance.teacher_id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
+                <li><a href="{% url 'c_canteen' teacher_instance.teacher_id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                {% endif %}
                 <li><a href="#"><i class="fas fa-book"></i> Library Management System</a></li>
                 <li><a href="#"><i class="fas fa-user-check"></i> Attendance Management System</a></li>
                 <li><a href="#"><i class="fas fa-money-bill-alt"></i> Account Management System</a></li>

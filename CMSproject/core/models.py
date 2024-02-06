@@ -44,6 +44,7 @@ class Faculty(models.Model):
         return f"{self.name}"
 
 class Student(models.Model):
+    student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     rollNo = models.CharField(max_length=10)
@@ -55,14 +56,23 @@ class Student(models.Model):
         return f"{self.faculty} - {self.name}"
 
 class Teacher(models.Model):
+    teacher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+    # delete garyo vaney model k hunxa
+    # def delete(self, *args, **kwargs):
+    #     # Remove the associated file when the record is deleted
+    #     storage, path = self.profile_picture.storage, self.profile_picture.path
+    #     super(Teacher, self).delete(*args, **kwargs)
+    #     storage.delete(path)
 
     def __str__(self):
         return f"{self.subjects}-{self.name}"
 
 class Admin(models.Model):
+    admin_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=20)
@@ -141,3 +151,12 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return f"{self.order} - {self.total_amount}"
+
+class MyModel(models.Model):
+    photo = models.ImageField(upload_to='photos/', null=True, blank=True)
+
+    def delete(self, *args, **kwargs):
+        # Remove the associated file when the record is deleted
+        storage, path = self.photo.storage, self.photo.path
+        super(MyModel, self).delete(*args, **kwargs)
+        storage.delete(path)

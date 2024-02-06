@@ -186,19 +186,17 @@
 </div>
 
 <br> <br>
-<form id="uploadResult" enctype="multipart/form-data" method="post" action="{% url 'upload_result_file' %}">
-    {% comment %} {% csrf_token %}
-    {{ form.as_p }} {% endcomment %}
+<form id="uploadForm" enctype="multipart/form-data">
     <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" style="display: none;">
-<div class="button-container"> 
-    <button type="button" id="importButton" onclick="importData()">Import Sheet</button>
+<div class="button-container">
+    <button type="button" id="importButton" onclick="importData()">Import Spreadsheet</button>
     <button type="button" id="submitDataButton" onclick="submitData()">Submit Data</button>
 </div>
 </form>
 
     <table id="spreadsheetData"></table>
 
-        <script src="{% static 'examsection/js/exam.js' %}"></script>
+        <script src="exam.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
       
     </body>

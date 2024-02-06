@@ -60,9 +60,9 @@
             </li>
             <li class="pageLink">
                 {% if user_type == 'student' %}
-                    <a href="{% url 'c_canteen' user=student_instance.id %}">Canteen</a>
+                    <a href="{% url 'c_canteen' user=student_instance.student_id %}">Canteen</a>
                 {% elif user_type == 'teacher' %}
-                    <a href="{% url 'c_canteen' user=teacher_instance.id %}">Canteen</a>
+                    <a href="{% url 'c_canteen' user=teacher_instance.teacher_id %}">Canteen</a>
                 {% endif %}
             </li>
             <li class="pageLink">

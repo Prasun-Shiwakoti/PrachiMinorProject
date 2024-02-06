@@ -24,23 +24,23 @@ def loginaction(request):
 
             if usertype == 'student':
                 student = Student.objects.get(user=custom_user)
-                print(reverse('s_dashboard', kwargs={'user': student.id}))
-                return redirect(reverse('s_dashboard', kwargs={'user': student.id}))
+                print(reverse('s_dashboard', kwargs={'user': student.student_id}))
+                return redirect(reverse('s_dashboard', kwargs={'user': student.student_id}))
             elif usertype == 'teacher':
                 teacher = Teacher.objects.get(user=custom_user)
-                print(reverse('t_dashboard', kwargs={'user': teacher.id}))
-                return redirect(reverse('t_dashboard', kwargs={'user': teacher.id}))
+                print(reverse('s_dashboard', kwargs={'user': teacher.teacher_id}))
+                return redirect(reverse('s_dashboard', kwargs={'user': teacher.teacher_id}))
             elif usertype == 'admin':
                 if Admin.objects.filter(user=custom_user).exists():
                     admin_instance = Admin.objects.get(user=custom_user)
                     if admin_instance.role == 'staff':
                         print("Redirecting to canteen")
-                        print(reverse('s_canteen', kwargs={'user': admin_instance.id}))
-                        return redirect(reverse('s_canteen', kwargs={'user': admin_instance.id}))
+                        print(reverse('s_canteen', kwargs={'user': admin_instance.admin_id}))
+                        return redirect(reverse('s_canteen', kwargs={'user': admin_instance.admin_id}))
                     elif admin_instance.role == 'exam':
                         print("Redirecting to examsection")
-                        print(reverse('examsection_view', kwargs={'user': admin_instance.id}))
-                        return redirect(reverse('examsection_view', kwargs={'user': admin_instance.id}))
+                        print(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
+                        return redirect(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
 
     else:
         print("Authentication failed")

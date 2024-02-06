@@ -5,7 +5,7 @@ from django.views.decorators.http import require_POST
 from examsection.forms.add_result import FilterForm
 from django.views.decorators.csrf import csrf_protect
 from django.views import View
-from examsection.forms.add_result import upload_result_form
+from examsection.forms.add_result import UploadResultForm
 from django.shortcuts import render, get_object_or_404
 
 @csrf_protect
@@ -27,7 +27,7 @@ def handle_filter_submission(request):
 
 def addresult_view(request, semester, batch, faculty, exam_type, user):
     try:
-        admin_instance = get_object_or_404(Admin, id=user)
+        admin_instance = get_object_or_404(Admin, admin_id=user)
     except Admin.DoesNotExist:
         raise Http404("Admin not found")
 
@@ -45,7 +45,7 @@ class upload_result_file(View):
     template_name = 'add_result.html'
 
     def get(self, request, *args, **kwargs):
-        form = upload_result_form()
+        form = UploadResultForm()
         return render(request, self.template_name, {'form': form})
 
     

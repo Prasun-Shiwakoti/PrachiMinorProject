@@ -110,7 +110,7 @@ function get_filter_metadata(){
 function importData() {
     var fileInput = document.getElementById('fileInput');
 
-    fileInput.addEventListener('change', function (e) {
+    fileInput.getElementById('fileInput').addEventListener('change', function (e) {
         var file = e.target.files[0];
 
         var reader = new FileReader();
