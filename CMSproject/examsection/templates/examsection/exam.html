@@ -52,7 +52,7 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="{% url 'examsection_view'%}">HOME</a>
+                <a href="{% url 'examsection_view' %}">HOME</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">Student Analysis</a>
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button id="goButton" type="button" onclick="applyFilters()" data-admin-id="{{ admin_instance.admin_id }}" data-url="{% url 'handle_filter_submission' %}">Go</button>
+                    <button id="goButton" type="button" onclick="applyFilters()" data-url="{% url 'handle_filter_submission' %}">Go</button>
                 </div>
             </form>
         </div>

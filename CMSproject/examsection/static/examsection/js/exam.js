@@ -19,22 +19,22 @@ function closeFilterModal() {
 }
 
 function handleOptionClick(option) {
-    // Open the filter modal
     openFilterModal();
-    // Set a variable to store the selected option
+    console.log('option click selected');
     let selectedOption = option;
     // Attach the selected option to the "Go" button
     document.getElementById('goButton').setAttribute('data-selected-option', selectedOption);
 }
 //GO button
 function applyFilters() {
+    console.log('go button');
     console.log('filter aplly garney thau, and we are firstly calling value liney funtion');
     var filterMetadata = get_filter_metadata();
     let selectedOption = document.getElementById('goButton').getAttribute('data-selected-option');
     console.log('aba fetch garna lagya');
     console.log('Filter Metadata:', filterMetadata);
-    var adminId = document.querySelector('[data-admin-id]').dataset.adminId;
     var url = document.querySelector('button[data-url]').dataset.url;
+    console.log (url);
     var formData = new FormData();
     switch (selectedOption) {
         case 'add_result':
@@ -60,7 +60,7 @@ function applyFilters() {
                 console.log(data);
                 var successMessage = 'Adding result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
                 console.log(successMessage);
-                window.location.href =`/examsection/addresult/${data.data.semester}/${data.data.batch_number}/${data.data.faculty}/${data.data.exam_type}/${adminId}`;
+                window.location.href =`/examsection/addresult/${data.data.semester}/${data.data.batch_number}/${data.data.faculty}/${data.data.exam_type}/`;
             })
             .catch(error => {
                 console.log('error catch garyo');

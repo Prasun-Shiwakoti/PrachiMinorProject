@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from core.models import Admin
 from django.http import Http404
+from uuid import UUID
 from django.views.decorators.http import require_POST
 from examsection.forms.add_result import FilterForm
 from django.views.decorators.csrf import csrf_protect
@@ -25,9 +26,10 @@ def handle_filter_submission(request):
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
 
-def addresult_view(request, semester, batch, faculty, exam_type, user):
+def addresult_view(request, semester, batch, faculty, exam_type):
+    user_id = request.session.get('user_id')
     try:
-        admin_instance = get_object_or_404(Admin, admin_id=user)
+        admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
     except Admin.DoesNotExist:
         raise Http404("Admin not found")
 
