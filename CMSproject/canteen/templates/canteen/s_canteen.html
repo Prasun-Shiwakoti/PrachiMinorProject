@@ -25,7 +25,7 @@
             </button>
         </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
-            <img src="{{admin_instance.profile_pics}}" alt="profilePic" class="profilePic">
+            <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
             <div class="profileOptions">
                 <ul>
@@ -48,10 +48,10 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a class="activePage" href="{% url 'c_canteen' user=admin_instance.id %}">Menu</a>
+                <a class="activePage" href="{% url 'c_canteen' user=admin_instance.admin_id %}">Menu</a>
             </li>
             <li class="pageLink">
-                <a href="{% url 'orders' admin_instance.id %}">Orders</a>
+                <a href="{% url 'orders' admin_instance.admin_id %}">Orders</a>
             </li>
             <li class="pageLink">
                 <a href="#">Sales</a>
@@ -134,7 +134,7 @@
                 <label for="itemPrice">Item Price :</label>
                 <input type="number" id="itemPrice">
                 <input type="file" id="itemImageInput" accept="image/*">
-                <button onclick="addItem()">Add Item</button>
+                <button onclick="addspecialItem()">Add Item</button>
         </div>
         </section>
         <section class="menu">
@@ -214,16 +214,20 @@
                 </div>
             </div>
             <div class="menu-change"><h3>Add Menu Items</h3>
-                <label for="itemsName">Item Name:</label>
-                <input type="text" id="itemsName">
-                <label for="itemsPrice">Item Price :</label>
-                <input type="number" id="itemsPrice">
-                <input type="file" id="itemsImageInput" accept="image/*">
-                <button onclick="addItems()">Add Item</button>
-        </div>
+                <form method="post" enctype="multipart/form-data" id="addItemForm">
+                    {% csrf_token %}
+                    <label for="itemsName">Item Name:</label>
+                    <input type="text" id="itemsName" name="itemsName">
+                    <label for="itemsPrice">Item Price:</label>
+                    <input type="number" id="itemsPrice" name="itemsPrice">
+                    <input type="file" id="itemsImageInput" name="itemsImageInput" accept="image/*">
+                    <button type="button" onclick="addmenuItem()" data-url="{% url 'add_new_menuItem' %}">Add Item</button>
+                </form>
+            </div>
         </section>
     </main>
         
     <script src="{% static 'canteen/js/s_canteen.js' %}"></script>
+
 </body>
 </html>
