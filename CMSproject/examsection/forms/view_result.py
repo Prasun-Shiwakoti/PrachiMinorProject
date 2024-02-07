@@ -13,10 +13,10 @@ class FilterForm(forms.form):
     semester_choices=[(str(i), str(i)) for i in range(1,9)]
     exam_type_choices = [('Regular', 'regular'), ('Back', 'back')]
 
-    faculty=forms.ChoiceField(choices=faculty_choices, required=True)
-    semester=forms.ChoiceField(choices=semester_choices, required=True)
-    exam_type=forms.ChoiceField(exam_type_choices, required=True)
-    batch_number=forms.IntegerField(min_value=1998, required=True)
+    faculty=forms.ChoiceField(choices=faculty_choices, required=False)
+    semester=forms.ChoiceField(choices=semester_choices, required=False)
+    exam_type=forms.ChoiceField(exam_type_choices, required=False)
+    batch_number=forms.IntegerField(min_value=1998, required=False)
 
     def apply_filters(self):
         faculty=self.cleaned_data['faculty']

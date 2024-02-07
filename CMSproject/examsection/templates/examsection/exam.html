@@ -52,7 +52,7 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="{% url 'examsection_view' user=admin_instance.id %}">HOME</a>
+                <a href="{% url 'examsection_view' user=admin_instance.admin_id %}">HOME</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">Student Analysis</a>
@@ -61,10 +61,10 @@
                 <a href="#" onclick="openCourseModal()">Course Info </a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="openFilterModal()">Add Results </a>
+                <a href="#" onclick="handleOptionClick('add_result')">Add Results </a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="openFilterModal()">View Transcript</a>
+                <a href="#" onclick="handleOptionClick('view_result')">View Results</a>
             </li>
         
         </ul>
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button type="button" onclick="applyFilters()" data-admin-id="{{ admin_instance.id }}" data-url="{% url 'handle_filter_submission' %}">Go</button>
+                    <button id="goButton" type="button" onclick="applyFilters()" data-admin-id="{{ admin_instance.admin_id }}" data-url="{% url 'handle_filter_submission' %}">Go</button>
                 </div>
             </form>
         </div>
