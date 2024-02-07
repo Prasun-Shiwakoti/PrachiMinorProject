@@ -51,19 +51,19 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="dashboard.html">Home</a>
+                <a href="{% url 's_dashboard' %}">Home</a>
             </li>
             <li class="pageLink">
                 <a href="#">Account</a>
             </li>
             <li class="pageLink">
-                <a href="#">Canteen</a>
+                <a href="{% url 'c_canteen'  %}">Canteen</a>
             </li>
             <li class="pageLink">
                 <a href="#">Student</a>
             </li>
             <li class="pageLink">
-                <a class="activePage" href="#">Exam</a>
+                <a class="activePage" href="{% url 's_dashboard' %}">Exam</a>
             </li>
 
             <li class="pageLink">
@@ -126,6 +126,6 @@
     <p style="font-size: 1.5em;">Add result</p>
     </a>
 
-<script href="{% static 'examsection/js/exam.js' %}></script>
+<script src="{% static 'examsection/js/exam.js' %}></script>
 </body>
 </html>

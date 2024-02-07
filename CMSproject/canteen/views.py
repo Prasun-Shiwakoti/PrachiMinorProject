@@ -2,33 +2,39 @@ from django.shortcuts import render
 from core.models import Student, Teacher, Admin, Order, MenuItem
 from django.views.decorators.http import require_POST
 from django.http import Http404, JsonResponse
-
-def c_canteen_view(request, user):
-    try:
-        student_instance = Student.objects.get(student_id=user)
-        context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student'}
-        return render(request, 'canteen/c_canteen.html', context)
-    except Student.DoesNotExist:
+from uuid import UUID
+def c_canteen_view(request):
+    user_id = request.session.get('user_id')
+    if user_id:
         try:
-            teacher_instance = Teacher.objects.get(teacher_id=user)
-            context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher'}
+            student_instance = Student.objects.get(student_id=UUID(user_id))
+            context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student'}
             return render(request, 'canteen/c_canteen.html', context)
-        except Teacher.DoesNotExist:
-            raise Http404("User not found")
+        except Student.DoesNotExist:
+            try:
+                # If Student is not found, attempt to get a Teacher instance
+                teacher_instance = Teacher.objects.get(teacher_id=UUID(user_id))
+                context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher'}
+                return render(request, 'canteen/c_canteen.html', context)
+            except Teacher.DoesNotExist:
+                raise Http404("User not found")
+    else:
+        raise Http404("User ID not found in session")
 
-def s_canteen_view(request, user):
+def s_canteen_view(request):
+    user_id = request.session.get('user_id')
     try:
-        admin_instance = Admin.objects.get(admin_id=user)
-        context = {'admin_instance': admin_instance}
-        return render(request, 'canteen/s_canteen.html', context)
+        admin_instance = Admin.objects.get(admin_id=UUID(user_id))
+        return render(request, 'canteen/s_canteen.html', {'admin_instance': admin_instance})
     except Admin.DoesNotExist:
-        raise Http404 ("admin not found")
-    
-def orders_view(request, user):
+        raise Http404("Admin not found")
+
+def orders_view(request):
+    user_id = request.session.get('user_id')
     try:
-        admin_instance = Admin.objects.get(admin_id=user)
-        order_instance = Order.objects.get(admin=admin_instance)
-        context = {'admin_instance': admin_instance, 'order_instance': order_instance}
+        admin_instance = Admin.objects.get(admin_id=UUID(user_id))
+        # order_instance = Order.objects.get(admin=admin_instance)
+        context = {'admin_instance': admin_instance}
         return render(request, 'canteen/orders.html', context)
     except Admin.DoesNotExist:
         raise Http404("Admin not found")

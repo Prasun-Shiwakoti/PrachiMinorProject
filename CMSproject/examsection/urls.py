@@ -4,7 +4,7 @@ from .views.add_result import handle_filter_submission, addresult_view , upload_
 
 urlpatterns =[
     path('handle_filter_submission/', handle_filter_submission,name='handle_filter_submission'),
-    path('exam/<uuid:user>/', examsection_view, name='examsection_view'),
+    path('exam/', examsection_view, name='examsection_view'),
     path('addresult/<int:semester>/<int:batch>/<str:faculty>/<str:exam_type>/<uuid:user>/', addresult_view, name='addresult_view'),
     path('addresultfile/', upload_result_file.as_view(), name='upload_result_file'),
 ]

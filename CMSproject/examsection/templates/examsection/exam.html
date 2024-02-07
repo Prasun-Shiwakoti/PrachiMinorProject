@@ -29,7 +29,7 @@
             </button>
         </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
-            <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
+            <img src="{{ admin_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{ admin_instance.name }}</div>
             <div class="profileOptions">
                 <ul>
@@ -52,7 +52,7 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="{% url 'examsection_view' user=admin_instance.admin_id %}">HOME</a>
+                <a href="{% url 'examsection_view'%}">HOME</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">Student Analysis</a>

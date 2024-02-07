@@ -53,23 +53,23 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="#">Home</a>
+                <a href="{% url 's_dashboard' %}">Home</a>
             </li>
             <li class="pageLink">
                 <a href="#">Account</a>
             </li>
             <li class="pageLink">
                 {% if user_type == 'student' %}
-                    <a href="{% url 'c_canteen' user=student_instance.student_id %}">Canteen</a>
+                    <a href="{% url 'c_canteen' %}">Canteen</a>
                 {% elif user_type == 'teacher' %}
-                    <a href="{% url 'c_canteen' user=teacher_instance.teacher_id %}">Canteen</a>
+                    <a href="{% url 'c_canteen'  %}">Canteen</a>
                 {% endif %}
             </li>
             <li class="pageLink">
                 <a href="#">Student</a>
             </li>
             <li class="pageLink">
-                <a href="#">Exam</a>
+                <a href="{% url 'student_view' %}">Exam</a>
             </li>
             <li class="pageLink">
                 <a href="#">Library</a>
