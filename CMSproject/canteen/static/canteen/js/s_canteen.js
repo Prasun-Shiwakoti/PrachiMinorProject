@@ -37,7 +37,37 @@ function showProfileOptions(){
     }
  }
 
- function addmenuItem() {
+ document.addEventListener('DOMContentLoaded', function () {
+    // Fetch menu items from the server
+    fetch('{% url "get_menu_items" %}')
+        .then(response => response.json())
+        .then(data => {
+            // Access the menu items array
+            var menuItems = data.menu_items;
+
+            // Render menu items dynamically
+            var menuContainer = document.getElementById('menus');
+            menuContainer.innerHTML = '';  // Clear existing items
+
+            menuItems.forEach(item => {
+                var newItem = document.createElement('div');
+                newItem.className = 'item';
+                newItem.innerHTML = `
+                    <img src="${item.image_url}" alt="${item.name}">
+                    <div class="itemName">${item.name}</div>
+                    <div class="itemPrice"> Rs. ${item.price} /- </div>
+                    <button onclick="deleteItem(this)">Delete Item</button>
+                `;
+                menuContainer.appendChild(newItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching menu items:', error);
+        });
+});
+
+
+function addmenuItem() {
     // Get values from input fields
     var itemName = document.getElementById("itemName").value;
     var itemPrice = document.getElementById("itemPrice").value;
@@ -88,7 +118,6 @@ function showProfileOptions(){
         alert("Please select an image for the item.");
     }
 }
-
 
 
 function deleteItem(button) {

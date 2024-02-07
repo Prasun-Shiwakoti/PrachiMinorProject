@@ -55,3 +55,8 @@ def add_item(request):
     return JsonResponse(response_data)
   
 
+def get_menu_items(request):
+    menu_items = MenuItem.objects.all()
+    data = [{'name': item.name, 'price': item.price, 'image_url': item.image.url} for item in menu_items]
+    return JsonResponse({'menu_items': data})
+
