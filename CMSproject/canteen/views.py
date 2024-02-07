@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from core.models import Student, Teacher, Admin, Order
-from django.http import Http404
+from core.models import Student, Teacher, Admin, Order, MenuItem
+from django.views.decorators.http import require_POST
+from django.http import Http404, JsonResponse
 
 def c_canteen_view(request, user):
     try:
@@ -33,3 +34,24 @@ def orders_view(request, user):
         raise Http404("Admin not found")
     except Order.DoesNotExist:
         raise Http404("Order not found")
+
+@require_POST
+def add_item(request):
+    item_name = request.POST.get('itemsName')
+    item_price = request.POST.get('itemsPrice')
+    item_image = request.FILES.get('itemsImageInput')
+            # Create a new MenuItem object and save it to the database
+    new_item = MenuItem(name=item_name, price=item_price, image=item_image)
+    new_item.save()
+    response_data = {
+        'message': 'Item added successfully',
+        'item': {
+            'name': new_item.name,
+            'price': new_item.price,
+            'image_url': new_item.image.url,
+        }
+    }
+    # Send a JSON response back to the JavaScript code
+    return JsonResponse(response_data)
+  
+

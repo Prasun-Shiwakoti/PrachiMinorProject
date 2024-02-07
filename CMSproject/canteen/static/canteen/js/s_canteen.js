@@ -36,7 +36,8 @@ function showProfileOptions(){
 
     }
  }
- function addItem() {
+
+ function addmenuItem() {
     // Get values from input fields
     var itemName = document.getElementById("itemName").value;
     var itemPrice = document.getElementById("itemPrice").value;
@@ -46,27 +47,49 @@ function showProfileOptions(){
     if (itemImageInput.files.length > 0) {
         var itemImage = URL.createObjectURL(itemImageInput.files[0]);
 
-        // Create a new item div
-        var newItem = document.createElement("div");
-        newItem.className = "item";
-        newItem.innerHTML = `
-            <img src="${itemImage}" alt="${itemName}">
-            <div class="itemName">${itemName}</div>
-            <div class="itemPrice"> Rs. ${itemPrice} /- </div>
-            <button onclick="deleteItem(this)">Delete Item</button>
-        `;
+        // Prepare the data for the fetch request
+        var formData = new FormData();
+        formData.append('itemsName', itemName);
+        formData.append('itemsPrice', itemPrice);
+        formData.append('itemsImageInput', itemImageInput.files[0]);
+        var url = document.querySelector('button[data-url]').dataset.url;
+        // Send the data to the server using fetch
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            console.log('success vayo hai data base ma halney kaam')
+             // Access the details of the newly added item
+             var newItemDetails = data.item;
+            var newItem = document.createElement("div");
+            newItem.className = "item";
+            newItem.innerHTML = `
+                <img src="${itemImage}" alt="${itemName}">
+                <div class="itemName">${itemName}</div>
+                <div class="itemPrice"> Rs. ${itemPrice} /- </div>
+                <button onclick="deleteItem(this)">Delete Item</button>
+            `;
+            console.log('aba naya div banaudaii to display the added menu');
+            // Append the new item to the menu container
+            document.getElementById("menuItemsContainer").appendChild(newItem);
 
-        // Append the new item to the menu container
-        document.getElementById("menuItemsContainer").appendChild(newItem);
-
-        // Clear input fields after adding the item
-        document.getElementById("itemName").value = "";
-        document.getElementById("itemPrice").value = "";
-        itemImageInput.value = ""; // Clear the file input
+            // Clear input fields after adding the item
+            document.getElementById("itemName").value = "";
+            document.getElementById("itemPrice").value = "";
+            itemImageInput.value = ""; // Clear the file input
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     } else {
         alert("Please select an image for the item.");
     }
 }
+
+
 
 function deleteItem(button) {
     // Get the parent element (item) of the clicked button
@@ -85,7 +108,7 @@ function orderItem(button) {
     // Add your ordering logic here, for example, display an alert
     alert(`Ordered ${itemName} for ${itemPrice}`);
 } 
-function addItems() {
+function addspecialItem() {
     // Get values from input fields
     var itemsName = document.getElementById("itemsName").value;
     var itemsPrice = document.getElementById("itemsPrice").value;
