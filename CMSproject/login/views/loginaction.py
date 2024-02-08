@@ -41,7 +41,8 @@ def loginaction(request):
                         print("Redirecting to examsection")
                         print(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
                         return redirect(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
-
+        else:
+            return redirect("/")   
     else:
         print("Authentication failed")
         return render(request, 'login/login.html', {'error_message': 'Invalid login credentials. Please try again.'})
