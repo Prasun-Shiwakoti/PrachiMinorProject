@@ -24,25 +24,24 @@ def loginaction(request):
 
             if usertype == 'student':
                 student = Student.objects.get(user=custom_user)
-                print(reverse('s_dashboard', kwargs={'user': student.student_id}))
-                return redirect(reverse('s_dashboard', kwargs={'user': student.student_id}))
+                request.session['user_id'] = str(student.student_id)
+                return redirect(reverse('s_dashboard'))
             elif usertype == 'teacher':
                 teacher = Teacher.objects.get(user=custom_user)
-                print(reverse('s_dashboard', kwargs={'user': teacher.teacher_id}))
-                return redirect(reverse('s_dashboard', kwargs={'user': teacher.teacher_id}))
+                request.session['user_id'] = str(teacher.teacher_id)
+                return redirect(reverse('s_dashboard'))
             elif usertype == 'admin':
                 if Admin.objects.filter(user=custom_user).exists():
                     admin_instance = Admin.objects.get(user=custom_user)
                     if admin_instance.role == 'staff':
                         print("Redirecting to canteen")
-                        print(reverse('s_canteen', kwargs={'user': admin_instance.admin_id}))
-                        return redirect(reverse('s_canteen', kwargs={'user': admin_instance.admin_id}))
+                        request.session['user_id'] = str(admin_instance.admin_id)
+                        return redirect(reverse('s_canteen'))
                     elif admin_instance.role == 'exam':
                         print("Redirecting to examsection")
-                        print(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
-                        return redirect(reverse('examsection_view', kwargs={'user': admin_instance.admin_id}))
-        else:
-            return redirect("/")   
+                        request.session['user_id'] = str(admin_instance.admin_id)
+                        return redirect(reverse('examsection_view'))
+
     else:
         print("Authentication failed")
         return render(request, 'login/login.html', {'error_message': 'Invalid login credentials. Please try again.'})

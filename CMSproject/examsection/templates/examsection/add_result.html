@@ -52,7 +52,7 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="{% url 'examsection_view' admin_instance.id %}">Home</a>
+                <a href="{% url 'examsection_view' %}">Home</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">Student Analysis</a>
@@ -62,7 +62,7 @@
             </li>
             <li class="pageLink">
                 <li class="pageLink">
-                    <a href="{% url 'addresult_view' semester=semester batch=batch faculty=faculty exam_type=exam_type user=admin_instance.id %}" onclick="event.preventDefault(); openFilterModal();">Add Results</a>
+                    <a href="{% url 'addresult_view' semester=semester batch=batch faculty=faculty exam_type=exam_type %}" onclick="event.preventDefault(); openFilterModal();">Add Results</a>
                 </li>
                 
             </li>

@@ -9,9 +9,9 @@
 </head>
 <body>
     {% if user_type == 'student' %}
-    <a href="{% url 's_dashboard' user=student_instance.student_id %}"></a>
+    <a href="{% url 's_dashboard' %}"></a>
     {% elif user_type == 'teacher' %}
-    <a href="{% url 's_dashboard' user=teacher_instance.teacher_id %}"></a>
+    <a href="{% url 's_dashboard' %}"></a>
     {% endif %}
      <nav class="navbar">
         <picture class="logoContainer">
@@ -58,11 +58,11 @@
             <h2>Systems</h2>
             <ul>
                 {% if user_type == 'student' %}
-                <li><a href="{% url 'student_view' student_instance.student_id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
-                <li><a href="{% url 'c_canteen' student_instance.student_id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                <li><a href="{% url 'student_view' %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
+                <li><a href="{% url 'c_canteen'  %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
                 {% elif user_type == 'teacher' %}
-                <li><a href="{% url 'teacher_view' teacher_instance.teacher_id %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
-                <li><a href="{% url 'c_canteen' teacher_instance.teacher_id %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
+                <li><a href="{% url 'teacher_view' %}"><i class="fas fa-cogs"></i> Exam Management System</a></li>
+                <li><a href="{% url 'c_canteen' %}"><i class="fas fa-utensils"></i> Canteen Management System</a></li>
                 {% endif %}
                 <li><a href="#"><i class="fas fa-book"></i> Library Management System</a></li>
                 <li><a href="#"><i class="fas fa-user-check"></i> Attendance Management System</a></li>
