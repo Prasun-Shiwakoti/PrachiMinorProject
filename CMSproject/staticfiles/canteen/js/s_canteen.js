@@ -67,6 +67,31 @@ function showProfileOptions(){
         alert("Please select an image for the item.");
     }
 }
+function AddToSpecial(button) {
+    // Get the parent div of the item
+    var itemDiv = button.parentNode;
+
+    // Retrieve item details
+    var itemName = itemDiv.querySelector(".itemName").textContent;
+    var itemPrice = itemDiv.querySelector(".itemPrice").textContent;
+    var itemImageSrc = itemDiv.querySelector("img").src;
+
+    // Create a new item div
+    var newItem = document.createElement("div");
+    newItem.classList.add("item");
+    newItem.innerHTML = `
+        <img src="${itemImageSrc}" alt="${itemName}">
+        <div class="itemName">${itemName}</div>
+        <div class="itemPrice">${itemPrice}</div>
+        <button onclick="deleteItem(this)">Delete Item</button>
+    `;
+
+    // Append the new item to the menuItemsContainer
+    var menuItemsContainer = document.getElementById("menuItemsContainer");
+    menuItemsContainer.appendChild(newItem);
+    button.textContent = "Added!";
+
+}
 
 function deleteItem(button) {
     // Get the parent element (item) of the clicked button
