@@ -1,6 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.core.files import File
-from core.models import CustomUser, Student, Teacher, Admin, Faculty, Subject, Customer, Order, OrderDetail, MenuItem
+from datetime import date
+import random
+from core.models import CustomUser, Student, Teacher, Admin, Faculty, Subject, Customer, Order, OrderDetail, MenuItem,Marks
 import os
 
 class Command(BaseCommand):
@@ -8,33 +10,37 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Create Faculty
-        computer_faculty = Faculty.objects.create(name='Computer Science')
-        civil_faculty = Faculty.objects.create(name='Civil Engineering')
+        computer_faculty = Faculty.objects.create(name='Computer')
+        civil_faculty = Faculty.objects.create(name='Civil')
 
         # Create Students
         student_user1 = CustomUser.objects.create_user(email='student1@example.com', password='12345', usertype='student')
         student1 = Student.objects.create(user=student_user1, name='Student 1', rollNo='077bct039', batch='2077', semester='6', faculty=computer_faculty)
+        
+        student_user2 = CustomUser.objects.create_user(email='student2@example.com', password='12345', usertype='student')
+        student2 = Student.objects.create(user=student_user2, name='Student 2', rollNo='078bct001', batch='2078', semester=1, faculty=computer_faculty)
+
+        student_user3 = CustomUser.objects.create_user(email='student3@example.com', password='12345', usertype='student')
+        student3 = Student.objects.create(user=student_user3, name='Student 3', rollNo='078bct002', batch='2077', semester=3, faculty=computer_faculty)
+
+        # Create students for Civil Faculty - Semester 1 and 4
+        student_user4 = CustomUser.objects.create_user(email='student4@example.com', password='12345', usertype='student')
+        student4 = Student.objects.create(user=student_user4, name='Student 4', rollNo='078bct003', batch='2078', semester=1, faculty=civil_faculty)
+
+        student_user5 = CustomUser.objects.create_user(email='student5@example.com', password='12345', usertype='student')
+        student5 = Student.objects.create(user=student_user5, name='Student 5', rollNo='078bct004', batch='2077', semester=4, faculty=civil_faculty)
+        
         self.add_profile_picture(student1, 'media/student1.jpg')
+        self.add_profile_picture(student2, 'media/student1.jpg')
+        self.add_profile_picture(student3, 'media/student1.jpg')
+        self.add_profile_picture(student4, 'media/student1.jpg')
+        self.add_profile_picture(student5, 'media/student1.jpg')
 
         # Create Teachers
         teacher_user1 = CustomUser.objects.create_user(email='teacher1@example.com', password='67890', usertype='teacher')
         teacher1 = Teacher.objects.create(user=teacher_user1, name='Teacher 1')
         self.add_profile_picture(teacher1, 'media/teacher1.jpg')
 
-        # Create Subjects
-        subject1 = Subject.objects.create(name='Programming', semester='6')
-        subject2 = Subject.objects.create(name='Mathematics', semester='6')
-
-        #Add subjects to faculty
-        subject1.faculty.add(computer_faculty, civil_faculty)
-        subject2.faculty.add(computer_faculty, civil_faculty)
-
-        # Add Students to Subjects
-        subject1.students.add(student1)
-        subject2.students.add(student1)
-
-        # Add Teachers to Subjects
-        subject1.teachers.add(teacher1)
 
         # Create Admins
         admin_user1 = CustomUser.objects.create_user(email='admin1@example.com', password='exam12345', usertype='admin')
