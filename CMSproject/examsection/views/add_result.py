@@ -10,7 +10,7 @@ from examsection.forms.add_result import UploadResultForm
 from django.shortcuts import render, get_object_or_404
 
 @csrf_protect
-def handle_filter_submission(request):
+def handle_add_result_submission(request):
     if request.method == 'POST':
         form = FilterForm(request.POST)
         print(request.POST)

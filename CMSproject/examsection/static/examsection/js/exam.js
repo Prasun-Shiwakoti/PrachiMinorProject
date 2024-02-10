@@ -29,55 +29,108 @@ function handleOptionClick(option) {
 function applyFilters() {
     console.log('go button');
     console.log('filter aplly garney thau, and we are firstly calling value liney funtion');
+
     var filterMetadata = get_filter_metadata();
+    var filterMetadata = get_filter_metadata();
+    var formData = new FormData();
     let selectedOption = document.getElementById('goButton').getAttribute('data-selected-option');
+
     console.log('aba fetch garna lagya');
     console.log('Filter Metadata:', filterMetadata);
-    var url = document.querySelector('button[data-url]').dataset.url;
-    console.log (url);
-    var formData = new FormData();
+
+    Object.entries(filterMetadata).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
+
+    // Add CSRF token to the headers
+    formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
     switch (selectedOption) {
         case 'add_result':
-            Object.entries(filterMetadata).forEach(([key, value]) => {
-                formData.append(key, value);
-            });
-        
-            // Add CSRF token to the headers
-            formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
-        
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => {
-                console.log('response lina aako yeta');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data);
-                var successMessage = 'Adding result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
-                console.log(successMessage);
-                window.location.href =`/examsection/addresult/${data.data.semester}/${data.data.batch_number}/${data.data.faculty}/${data.data.exam_type}/`;
-            })
-            .catch(error => {
-                console.log('error catch garyo');
-                console.error('Fetch error:', error);
-                closeFilterModal();
-            })
-            .finally(() => {
-                console.log('regardless of k k vayo, we are onto closing filter now');
-                closeFilterModal();
-            });
+            console.log(addResultUrl);
+            fetchAddResult(formData);
             break;
-            case 'view_result':
-                break;
-            case 'student_analysis':
-                break;
+        case 'view_result':
+            console.log(viewResultUrl);
+            fetchViewResult(formData);
+            break;
+        case 'student_analysis':
+            break;
     }
 }
+function fetchAddResult(formData) {
+    fetch(addResultUrl, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        console.log('response lina aako yeta');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        var successMessage = 'Adding result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
+        console.log(successMessage);
+        window.location.href =`/examsection/addresult/${data.data.semester}/${data.data.batch_number}/${data.data.faculty}/${data.data.exam_type}/`;
+    })
+    .catch(error => {
+        console.log('error catch garyo');
+        console.error('Fetch error:', error);
+        closeFilterModal();
+    })
+    .finally(() => {
+        console.log('regardless of k k vayo, we are onto closing filter now');
+        closeFilterModal();
+    });
+}
+function fetchViewResult(formData) {
+    fetch(viewResultUrl, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        console.log('response lina aako yeta');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        var successMessage = 'showing result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
+        console.log(successMessage);
+        let url = '/examsection/viewresult/?';
+        if (data.data.semester) {
+            url += `semester=${data.data.semester}&`;
+        }
+        if (data.data.batch_number !== null) {
+            url += `batch=${data.data.batch_number}&`;
+        }
+        if (data.data.faculty) {
+            url += `faculty=${data.data.faculty}&`;
+        }
+        if (data.data.exam_type) {
+            url += `exam_type=${data.data.exam_type}&`;
+        }
+        // Remove the trailing "&" if present
+        url = url.slice(0, -1);
+        console.log('Redirecting to:', url);
+        window.location.href = url;          
+    }) 
+    .catch(error => {
+        console.log('error catch garyo');
+        console.error('Fetch error:', error);
+        closeFilterModal();
+    })
+    .finally(() => {
+        console.log('regardless of k k vayo, we are onto closing filter now');
+        closeFilterModal();
+    });
+
+}
+
 //COOKIESSSS
 function getCookie(name) {
     console.log('cookies lina aako');
@@ -122,7 +175,7 @@ function get_filter_metadata(){
         batch_number:batchNumber
     };
 }
-        
+
 function importData() {
     var fileInput = document.getElementById('fileInput');
 

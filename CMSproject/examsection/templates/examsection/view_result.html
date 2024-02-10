@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view_result</title>
+</head>
+<body>
+    <h1> THIS IS FOR THE RESULT VIEWING </h1>
+    <a href="{% url 'viewresult_view' %}"></a>
+    <p>{{admin_instance.name}}</p>
+    <p>{{semester}}</p>
+    <p>{{batch}}</p>
+    <p>{{exam_type}}</p>
+    <p>{{faculty}}</p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Student Name</th>
+                {% for subject_result in results.0.subjects %}
+                    <th>{{ subject_result.subject.name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student_result in results %}
+                <tr>
+                    <td>{{ student_result.student.rollNo }}</td>
+                    <td>{{ student_result.student.name }}</td>
+                    {% for subject_result in student_result.subjects %}
+                        <td>{{ subject_result.obtained_marks }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>        
+    </table>
+</body>
+</html>

@@ -43,6 +43,15 @@ class Faculty(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
+    faculty = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
+    credit_hours = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.name}-{self.faculty}-{self.semester}"
+
 class Student(models.Model):
     student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -53,13 +62,14 @@ class Student(models.Model):
     faculty=models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     def __str__(self):
-        return f"{self.faculty} - {self.name}"
+        return f"{self.faculty} - {self.name}-{self.semester}"
 
 class Teacher(models.Model):
     teacher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    subject =models.ManyToManyField(Subject)
 
     # delete garyo vaney model k hunxa
     # def delete(self, *args, **kwargs):
@@ -69,7 +79,7 @@ class Teacher(models.Model):
     #     storage.delete(path)
 
     def __str__(self):
-        return f"{self.subjects}-{self.name}"
+        return f"{self.subject}-{self.name}"
 
 class Admin(models.Model):
     admin_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -82,24 +92,14 @@ class Admin(models.Model):
     def __str__(self):
         return f"{self.id}-{self.role}"
 
-class Subject(models.Model):
-    name = models.CharField(max_length=100)
-    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
-    faculty = models.ManyToManyField(Faculty)
-    teachers = models.ManyToManyField(Teacher)
-    students = models.ManyToManyField(Student)
-
-    def __str__(self):
-        return f"{self.name}"
-
 class Marks(models.Model):
     EXAM_TYPE_CHOICES = [
         ('regular', 'Regular'),
         ('back', 'Back'),
     ]
 
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null="true")
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null="true")
+    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     full_marks = models.DecimalField(max_digits=5, decimal_places=2)
     pass_marks = models.DecimalField(max_digits=5, decimal_places=2)
     obtained_marks = models.DecimalField(max_digits=5, decimal_places=2)
@@ -109,6 +109,10 @@ class Marks(models.Model):
     exam_date = models.DateField()
     marks_updated_at = models.DateTimeField(auto_now_add=True)
     marks_updated_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def batch(self):
+        return self.student.batch
 
     def __str__(self):
         return f"{self.subject} - {self.student} - {self.exam_type} Exam - Semester {self.semester}"
@@ -152,11 +156,3 @@ class OrderDetail(models.Model):
     def __str__(self):
         return f"{self.order} - {self.total_amount}"
 
-class MyModel(models.Model):
-    photo = models.ImageField(upload_to='photos/', null=True, blank=True)
-
-    def delete(self, *args, **kwargs):
-        # Remove the associated file when the record is deleted
-        storage, path = self.photo.storage, self.photo.path
-        super(MyModel, self).delete(*args, **kwargs)
-        storage.delete(path)
