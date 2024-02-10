@@ -1,13 +1,41 @@
-function showProfileOptions() {
-    var profileOptions = document.querySelector('.userProfileContainer .profileOptions');
+const aside = document.getElementsByClassName("aside")[0];
+const main = document.getElementsByClassName("main")[0];
+const navbarHeight = document.getElementsByClassName("navbar")[0].clientHeight;
+const windowHeight = window.innerHeight;
+const profileOptions = document.getElementsByClassName("profileOptions")[0];
 
-    // Toggle the visibility of profileOptions
-    if (profileOptions.style.display === 'block') {
-        profileOptions.style.display = 'none';
-    } else {
+function adjustHeight(){
+    aside.style.height = (windowHeight - navbarHeight) + 'px';
+    main.style.height = (windowHeight - navbarHeight) + 'px';
+    main.style.maxHeight = (windowHeight - navbarHeight) + 'px';
+
+}
+adjustHeight();
+
+function showProfileOptions(){
+    if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
     }
+    else{
+        profileOptions.style.display = 'none';
+    }
 }
+ var box = document.getElementById('batta');
+ var down = false;
+ function togglenoti()
+ {
+    if(down){
+       box.style.height = '0px';
+       box.style.opacity = 0;
+       down = false; 
+    }
+    else{
+        box.style.opacity=1;
+        down = true;
+        box.style.height = '400px';
+        // box.style.width = '220px';
+    }
+ }
 function openFilterModal() {
     console.log('filter opened');
     document.getElementById("filterModal").style.display = "flex";
@@ -122,11 +150,10 @@ function get_filter_metadata(){
         batch_number:batchNumber
     };
 }
-        
 function importData() {
     var fileInput = document.getElementById('fileInput');
 
-    fileInput.getElementById('fileInput').addEventListener('change', function (e) {
+    fileInput.addEventListener('change', function (e) {
         var file = e.target.files[0];
 
         var reader = new FileReader();
@@ -166,22 +193,26 @@ function displayData(data) {
     }
 }
 function submitData() {
-    // fetch('/submit_data_endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ data: getDataFromTable() }), // Adjust this part based on your data structure
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log('Data submitted successfully:', data);
-    //     // Optionally, you can perform any additional actions after successful submission
-    // })
-    // .catch(error => {
-    //     console.error('Error submitting data:', error);
-    //     // Optionally, you can handle errors or display an error message
-    // });
+    // You need to implement this function to send the data to your server for updating the database
+    // This can be done using AJAX (e.g., Fetch API or XMLHttpRequest) to send the data to your server endpoint
+    // The server-side code should handle the data and update the database accordingly
+    // Example AJAX code (using Fetch API):
+    fetch('/submit_data_endpoint', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: getDataFromTable() }), // Adjust this part based on your data structure
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Data submitted successfully:', data);
+        // Optionally, you can perform any additional actions after successful submission
+    })
+    .catch(error => {
+        console.error('Error submitting data:', error);
+        // Optionally, you can handle errors or display an error message
+    });
 }
 
 // Helper function to get data from the table
