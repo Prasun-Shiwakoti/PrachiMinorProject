@@ -137,12 +137,14 @@
             <div class="itemsContainer" id="menus">
                 <div id="menus">
                     {% for item in menu_items %}
-                        <div class="item">
-                            <img src="{{ item.image }}" alt="{{ item.name }}">
-                            <div class="itemName">{{ item.name }}</div>
-                            <div class="itemDescription">{{ item.description }}</div>
-                            <div class="itemPrice"> Rs. {{ item.price }} /-</div>
-                            <!-- Add other details or actions as needed -->
+                    <div class="item">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <div class="itemName">{{ item.name }}</div>
+                        <div class="itemPrice"> Rs.{{ item.price }}-/</div>
+                        <div class="item.description"> {{ item.description }}</div>
+                        <div class="buttons">
+                            <button onclick="deleteItem(this)">Delete Item</button>
+                            <button onclick="AddToSpecial(this)">Add to Specials</button>
                         </div>
                     {% endfor %}
                 </div>
