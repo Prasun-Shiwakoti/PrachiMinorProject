@@ -135,87 +135,18 @@
                 <h3>Menu</h3>
             </div>
             <div class="itemsContainer" id="menus">
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                
-                    </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                        <button onclick="deleteItem(this)">Delete Item</button><br>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                </div>
+                    {% for item in menu_items %}
+                        <div class="item">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                            <div class="itemName">{{ item.name }}</div>
+                            <div class="itemPrice"> Rs.{{ item.price }}-/</div>
+                            <div class="item.description"> {{ item.description }}</div>
+                            <div class="buttons">
+                                <button onclick="deleteItem(this)">Delete Item</button>
+                                <button onclick="AddToSpecial(this)">Add to Specials</button>
+                            </div>
+                        </div>
+                    {% endfor %}
             </div>
             <div class="menu-change"><h3>Add Menu Items</h3>
                 <form method="post" enctype="multipart/form-data" id="addItemForm">
@@ -224,8 +155,10 @@
                     <input type="text" id="itemsName" name="itemsName">
                     <label for="itemsPrice">Item Price:</label>
                     <input type="number" id="itemsPrice" name="itemsPrice">
+                    <label for="itemsDescription">Description:</label>
+                    <input type="text" id="itemsDescription" name="itemsDescription">
                     <input type="file" id="itemsImageInput" name="itemsImageInput" accept="image/*">
-                    <button type="button" onclick="addmenuItem()" data-url="{% url 'add_new_menuItem' %}">Add Item</button>
+                    <button type="button" onclick="addmenuItem()" data-url="{% url 'add_menuItem' %}">Add Item</button>
                 </form>
             </div>
         </section>

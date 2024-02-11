@@ -71,7 +71,7 @@ function addmenuItem() {
     // Get values from input fields
     var itemName = document.getElementById("itemName").value;
     var itemPrice = document.getElementById("itemPrice").value;
-    var itemImageInput = document.getElementById("itemImageInput").files[0];
+    var itemImageInput = document.getElementById("itemImageInput");
 
     // Check if a file is selected
     if (itemImageInput.files.length > 0) {
