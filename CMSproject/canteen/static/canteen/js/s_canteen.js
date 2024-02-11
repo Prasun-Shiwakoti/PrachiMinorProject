@@ -37,7 +37,7 @@ function showProfileOptions(){
     }
  }
 
- document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     // Fetch menu items from the server
     fetch('{% url "get_menu_items" %}')
         .then(response => response.json())
@@ -103,7 +103,7 @@ function addmenuItem() {
                 <button onclick="deleteItem(this)">Delete Item</button>
             `;
             console.log('aba naya div banaudaii to display the added menu');
-            // Append the new item to the menu container
+            // Add new item to the menu container
             document.getElementById("menuItemsContainer").appendChild(newItem);
 
             // Clear input fields after adding the item
@@ -115,56 +115,46 @@ function addmenuItem() {
             console.error('Error:', error);
         });
     } else {
-        alert("Please select an image for the item.");
+        toastr.error('Please select an image for the item.');
     }
 }
+function AddToSpecial(button) {
+    var itemDiv = button.parentNode;
 
+    // get item details
+    var itemName = itemDiv.querySelector(".itemName").textContent;
+    var itemPrice = itemDiv.querySelector(".itemPrice").textContent;
+    var itemImageSrc = itemDiv.querySelector("img").src;
+
+    // create new div
+    var newItem = document.createElement("div");
+    newItem.classList.add("item");
+    newItem.innerHTML = `
+        <img src="${itemImageSrc}" alt="${itemName}">
+        <div class="itemName">${itemName}</div>
+        <div class="itemPrice">${itemPrice}</div>
+        <button onclick="deleteItem(this)">Delete Item</button>
+    `;
+
+    // add new item to the menuItemsContainer
+    var menuItemsContainer = document.getElementById("menuItemsContainer");
+    menuItemsContainer.appendChild(newItem);
+    button.textContent = "Added!";
+
+}
 
 function deleteItem(button) {
-    // Get the parent element (item) of the clicked button
     var item = button.parentNode;
 
-    // Remove the item from the DOM
+    // remove the item
     item.parentNode.removeChild(item);
 }
 
 function orderItem(button) {
-    // Add your ordering logic here
-    // You can access the item details using the button's parent elements
+    // add your ordering logic here
     var itemName = button.parentNode.querySelector(".itemName").innerText;
     var itemPrice = button.parentNode.querySelector(".itemPrice").innerText;
 
-    // Add your ordering logic here, for example, display an alert
-    alert(`Ordered ${itemName} for ${itemPrice}`);
+    toastr.success(`Ordered ${itemName} for ${itemPrice}`, 'Order Placed');
 } 
-function addspecialItem() {
-    // Get values from input fields
-    var itemsName = document.getElementById("itemsName").value;
-    var itemsPrice = document.getElementById("itemsPrice").value;
-    var itemsImageInput = document.getElementById("itemsImageInput");
 
-    // Check if a file is selected
-    if (itemsImageInput.files.length > 0) {
-        var itemsImage = URL.createObjectURL(itemsImageInput.files[0]);
-
-        // Create a new item div
-        var newItems = document.createElement("div");
-        newItems.className = "item";
-        newItems.innerHTML = `
-            <img src="${itemsImage}" alt="${itemsName}">
-            <div class="itemsName">${itemsName}</div>
-            <div class="itemsPrice"> Rs. ${itemsPrice} /- </div>
-            <button onclick="deleteItem(this)">Delete Item</button>
-        `;
-
-        // Append the new item to the menu container
-        document.getElementById("menus").appendChild(newItems);
-
-        // Clear input fields after adding the item
-        document.getElementById("itemsName").value = "";
-        document.getElementById("itemsPrice").value = "";
-        itemsImageInput.value = ""; // Clear the file input
-    } else {
-        alert("Please select an image for the item.");
-    }
-}
