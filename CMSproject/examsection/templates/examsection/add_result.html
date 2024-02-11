@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    {% load static%}
+    {% load static %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,9 +13,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 </head>
 
 <body>
@@ -23,10 +25,14 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-
+        <div class="searchContainer">
+            <input type="text" placeholder="Search...">
+            <button class="search_button">
+            </button>
+        </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
-            <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
-            <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
+            <img src="{{ admin_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{ admin_instance.name }}</div>
             <div class="profileOptions">
                 <ul>
                     <li>
@@ -57,15 +63,14 @@
                 <a href="#" onclick="openCourseModal()">Course Info </a>
             </li>
             <li class="pageLink">
-                <a href="{% url 'addresult_view' semester=semester batch=batch faculty=faculty exam_type=exam_type %}" onclick="event.preventDefault(); openFilterModal();">Add Results</a>
+                <a href="#" onclick="handleOptionClick('add_result')">Add Results </a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="openFilterModal()">View Transcript</a>
+                <a href="#" onclick="handleOptionClick('view_result')">View Results</a>
             </li>
-            <li class="pageLink">
-                <a href="#" onclick="openHelpModal()">Help</a>
-            </li>
+        
         </ul>
+    
     </aside>
     <div id="filterIcon" onclick="openFilterModal()">🔍 Filter</div>
 
@@ -185,7 +190,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script src="{% static 'examsection/js/exam.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Include Toastr CSS and JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- Include jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 </body>
 
 </html>
