@@ -37,45 +37,16 @@ function showProfileOptions(){
     }
  }
 
- document.addEventListener('DOMContentLoaded', function () {
-    // Fetch menu items from the server
-    fetch('{% url "get_menu_items" %}')
-        .then(response => response.json())
-        .then(data => {
-            // Access the menu items array
-            var menuItems = data.menu_items;
-
-            // Render menu items dynamically
-            var menuContainer = document.getElementById('menus');
-            menuContainer.innerHTML = '';  // Clear existing items
-
-            menuItems.forEach(item => {
-                var newItem = document.createElement('div');
-                newItem.className = 'item';
-                newItem.innerHTML = `
-                    <img src="${item.image_url}" alt="${item.name}">
-                    <div class="itemName">${item.name}</div>
-                    <div class="itemPrice"> Rs. ${item.price} /- </div>
-                    <button onclick="deleteItem(this)">Delete Item</button>
-                `;
-                menuContainer.appendChild(newItem);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching menu items:', error);
-        });
-});
-
-
 function addmenuItem() {
     // Get values from input fields
-    var itemName = document.getElementById("itemName").value;
-    var itemPrice = document.getElementById("itemPrice").value;
-    var itemImageInput = document.getElementById("itemImageInput");
+    var itemName = document.getElementById("itemsName").value;
+    var itemPrice = document.getElementById("itemsPrice").value;
+    var itemImageInput = document.getElementById("itemsImageInput");
 
     // Check if a file is selected
     if (itemImageInput.files.length > 0) {
         var itemImage = URL.createObjectURL(itemImageInput.files[0]);
+        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         // Prepare the data for the fetch request
         var formData = new FormData();
@@ -86,29 +57,33 @@ function addmenuItem() {
         // Send the data to the server using fetch
         fetch(url, {
             method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            },
             body: formData,
         })
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            console.log('success vayo hai data base ma halney kaam')
-             // Access the details of the newly added item
-             var newItemDetails = data.item;
+            console.log('success vayo hai data base ma halney kaam');
+            // Access the details of the newly added item directly from data
             var newItem = document.createElement("div");
             newItem.className = "item";
             newItem.innerHTML = `
                 <img src="${itemImage}" alt="${itemName}">
                 <div class="itemName">${itemName}</div>
+                <div class="item.description">${data.item.description}</div>
                 <div class="itemPrice"> Rs. ${itemPrice} /- </div>
                 <button onclick="deleteItem(this)">Delete Item</button>
+                <button onclick="AddToSpecial(this)">Add to Specials</button>
             `;
             console.log('aba naya div banaudaii to display the added menu');
             // Append the new item to the menu container
-            document.getElementById("menuItemsContainer").appendChild(newItem);
-
+            document.getElementById("menus").appendChild(newItem);
             // Clear input fields after adding the item
-            document.getElementById("itemName").value = "";
-            document.getElementById("itemPrice").value = "";
+            document.getElementById("itemsName").value = "";
+            document.getElementById("itemsPrice").value = "";
+            document.getElementById("itemsDescription").value = "";
             itemImageInput.value = ""; // Clear the file input
         })
         .catch(error => {

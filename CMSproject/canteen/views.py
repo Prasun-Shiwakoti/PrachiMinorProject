@@ -6,29 +6,31 @@ from uuid import UUID
 def c_canteen_view(request):
     user_id = request.session.get('user_id')
     if user_id:
+        menu_items = MenuItem.objects.all()
         try:
             student_instance = Student.objects.get(student_id=UUID(user_id))
             context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student'}
-            return render(request, 'canteen/c_canteen.html', context)
+            return render(request, 'canteen/c_canteen.html', {'context': context, 'menu_items': menu_items})
         except Student.DoesNotExist:
             try:
                 # If Student is not found, attempt to get a Teacher instance
                 teacher_instance = Teacher.objects.get(teacher_id=UUID(user_id))
                 context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher'}
-                return render(request, 'canteen/c_canteen.html', context)
+                return render(request, 'canteen/c_canteen.html', {'context': context, 'menu_items': menu_items})
             except Teacher.DoesNotExist:
                 raise Http404("User not found")
     else:
         raise Http404("User ID not found in session")
 
 def s_canteen_view(request):
-    user_id = request.session.get('user_id')
     try:
+        user_id = request.session.get('user_id')
         admin_instance = Admin.objects.get(admin_id=UUID(user_id))
-        return render(request, 'canteen/s_canteen.html', {'admin_instance': admin_instance})
     except Admin.DoesNotExist:
         raise Http404("Admin not found")
-
+    menu_items = MenuItem.objects.all()
+    # Pass menu items along with admin_instance to the template
+    return render(request, 'canteen/s_canteen.html', {'admin_instance': admin_instance, 'menu_items': menu_items})
 def orders_view(request):
     user_id = request.session.get('user_id')
     try:
