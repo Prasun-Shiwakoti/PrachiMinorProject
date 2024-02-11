@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -52,7 +52,7 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="{% url 'examsection_view' %}">HOME</a>
+                <a href="{% url 'examsection_view' %}">Home</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">Student Analysis</a>
@@ -68,7 +68,6 @@
             </li>
         
         </ul>
-        <br> <br> <br> <br> <br> <br> <br> <br> <br><br> <br> <br> 
         <div class="contactInfo">
             <dl>
                 <dt>P.O.Box:</dt>
@@ -122,7 +121,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button id="goButton" type="button" onclick="applyFilters()" data-url="{% url 'handle_filter_submission' %}">Go</button>
+                    <button id="goButton" type="button" onclick="applyFilters()">Go</button>
                 </div>
             </form>
         </div>
@@ -161,9 +160,11 @@
         </form>
     </div>
 </div>
-
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        var addResultUrl = "{% url 'handle_add_result_submission' %}";
+        var viewResultUrl = "{% url 'handle_view_result_submission' %}";
+        {% comment %} var studentAnalysisUrl = "{% url 'handle_student_analysis_submission' %}"; {% endcomment %}
+    </script>
     <script src="{% static 'examsection/js/exam.js' %}"></script>
 </body>
 </html>

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
- 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -23,11 +23,7 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-        <div class="searchContainer">
-            <input type="text" placeholder="Search...">
-            <button class="search_button">
-            </button>
-        </div>
+
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
@@ -61,10 +57,7 @@
                 <a href="#" onclick="openCourseModal()">Course Info </a>
             </li>
             <li class="pageLink">
-                <li class="pageLink">
-                    <a href="{% url 'addresult_view' semester=semester batch=batch faculty=faculty exam_type=exam_type %}" onclick="event.preventDefault(); openFilterModal();">Add Results</a>
-                </li>
-                
+                <a href="{% url 'addresult_view' semester=semester batch=batch faculty=faculty exam_type=exam_type %}" onclick="event.preventDefault(); openFilterModal();">Add Results</a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="openFilterModal()">View Transcript</a>
@@ -72,10 +65,7 @@
             <li class="pageLink">
                 <a href="#" onclick="openHelpModal()">Help</a>
             </li>
-        
-        
         </ul>
-        <br> <br> <br> <br> <br> <br> <br> <br> <br><br> <br> <br> 
     </aside>
     <div id="filterIcon" onclick="openFilterModal()">🔍 Filter</div>
 
@@ -116,89 +106,87 @@
                 </div>
 
                 <div class="button-container">
-                    <button type="button" onclick="applyFilters()">Go</button>
+                    <button type="button" id="gobutton" onclick="applyFilters()">Go</button>
                 </div>
             </form>
         </div>
     </div>
     <!-- Another Modal for Help -->
-<div id="help" onclick="openHelpModal()">Help</div>
+    <div id="help" onclick="openHelpModal()">Help</div>
 
-<div id="helpModal" class="modal">
-    <div class="modal-content">
-        <h2>Help Instructions</h2>
-        <p>
-            Hi sweetie, i heard you need my help
-            to add results, i'll take you through procedures you need to follow.
-            idk the procedures yet but we will get there.
-            the best solution would be to not take exams at all.
-            i wish i were a jane austen novel's character hehehee.
-            Help and Support: If you encounter any challenges, our support team is readily available.
-             Reach out for technical assistance, clarification on exam-related queries, or any other concerns you may have.
-            By following these guidelines, you're set to optimize your exam management experience. 
-            We're committed to supporting your academic journey and ensuring a reliable and efficient
-            exam management process. Best of luck!
-            .
-            .
-            .
-            .
-            .
-            .
-        </p>
-        <div class="button-container">
-            <button type="button" onclick="closeHelpModal()">Close</button>
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <h2>Help Instructions</h2>
+            <p>
+                Hi sweetie, I heard you need my help to add results, I'll take you through procedures you need to follow.
+                I don't know the procedures yet, but we will get there.
+                The best solution would be to not take exams at all.
+                I wish I were a Jane Austen novel's character hehehee.
+                Help and Support: If you encounter any challenges, our support team is readily available.
+                Reach out for technical assistance, clarification on exam-related queries, or any other concerns you may have.
+                By following these guidelines, you're set to optimize your exam management experience.
+                We're committed to supporting your academic journey and ensuring a reliable and efficient
+                exam management process. Best of luck!
+                .
+                .
+                .
+            </p>
+            <div class="button-container">
+                <button type="button" onclick="closeHelpModal()">Close</button>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Another Modal for Courses -->
     <div id="filter" onclick="openCourseModal()">🔍 Filter</div>
-<div id="courseModal" class="modal">
-    <div class="modal-content">
-        <h2>Course Information</h2>
-        <form id="courseForm">
-            <label for="courseFaculty">Select Faculty:</label>
-            <select id="courseFaculty" name="courseFaculty">
-                <option value="Computer">Computer</option>
-                <option value="Civil">Civil</option>
-                <option value="Architecture">Architecture</option>
-                <option value="Electrical">Electrical</option>
-                <option value="Electronics">Electronics</option>
-            </select>
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <h2>Course Information</h2>
+            <form id="courseForm">
+                <label for="courseFaculty">Select Faculty:</label>
+                <select id="courseFaculty" name="courseFaculty">
+                    <option value="Computer">Computer</option>
+                    <option value="Civil">Civil</option>
+                    <option value="Architecture">Architecture</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Electronics">Electronics</option>
+                </select>
 
-            <label for="courseSemester">Select Semester:</label>
-            <select id="courseSemester" name="courseSemester">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-            </select>
+                <label for="courseSemester">Select Semester:</label>
+                <select id="courseSemester" name="courseSemester">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
 
-            <div class="button-container">
-                <button type="button" onclick="applyCourseFilters()"> Go </button>
-            </div>
-        </form>
+                <div class="button-container">
+                    <button type="button" onclick="applyCourseFilters()"> Go </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<br> <br>
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" style="display: none;">
-<div class="button-container">
-    <button type="button" id="importButton" onclick="importData()">Import Spreadsheet</button>
-    <button type="button" id="submitDataButton" onclick="submitData()">Submit Data</button>
-</div>
-</form>
+    <br> <br>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" style="display: none;">
+        <div class="button-container">
+            <button type="button" id="importButton" onclick="importData()">Import Spreadsheet</button>
+            <button type="button" id="submitButton" onclick="submitData()">Submit Data</button>
+            <button type="button" id="deleteButton" onclick="deleteFile()">Delete File</button>
+        </div>
+    </form>
 
     <table id="spreadsheetData"></table>
 
-        <script src="exam.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-      
-    </body>
-    </html>
-  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script src="{% static 'examsection/js/exam.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+</body>
+
+</html>
+

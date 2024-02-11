@@ -207,23 +207,14 @@ select, input {
 
 .button-container {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; /* Center the items horizontally */
+    height: 100%; /* Ensure full height */
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
 
-button:hover {
-    background-color: #45a049;
-}
+
 /* Styles for the Course Modal */
 
 .course-modal {
@@ -245,5 +236,125 @@ button:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
 }
+#helpModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px; /* Adjust the max-width as needed for a book-sized appearance */
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+#helpModal h2 {
+    margin-bottom: 10px;
+}
+
+#helpModal p {
+    margin-bottom: 15px;
+}
+
+#helpModal button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+/*for add result */
+
+
+
+
+#fileInput {
+    display: none; /* Hide the file input visually */
+}
+
+#spreadsheetData {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 80%; /* Adjust the width as needed */
+    margin-left: 25%;
+    margin-right: auto;
+}
+
+#spreadsheetData th,
+#spreadsheetData td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#spreadsheetData th {
+    background-color: #3498db;
+    color: white;
+}
+
+
+#goButton {
+    background-color: #4caf50;
+    color: #e9eff7;
+    border: none;
+    
+
+
+}
+#importButton {
+    background-color: #4caf50;
+    border: none;
+    color: #e9eff7;
+    align-self: flex-end; /* Align the Import button to the flex-end */
+    margin-top: 0px; /* Add margin for separation */
+}
+
+#deleteButton {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #4caf50;
+    border: none;
+    color: #e9eff7;
+}
+#submitButton { 
+    position: fixed;
+    bottom: 10px;
+    right: 70px;
+    background-color: #4caf50;
+    border: none;
+    color: #e9eff7;
+  
+}
+
+.button-container button:hover {
+    background-color: #45a049;
+}
+/* Icon Styles */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.icon i {
+    margin-right: 8px;
+}
+
+.icon:hover {
+    color: #007bff;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+}
+
+
 
 

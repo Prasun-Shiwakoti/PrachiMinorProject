@@ -1,52 +1,48 @@
-li,
-a {
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+li, a{
     text-decoration: none;
     list-style: none;
     color: black;
 }
-
-ul li:hover {
-    background-color: #5092c2;
+ul li:hover{
+    background-color: #95BEDC;
 }
 
-.navbar {
+.navbar{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 2rem;
-    background-color: #7cbff0;
-    position: fixed; /* Stick it to the top */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    width: 100%; /* Occupy full width */
+    background-color: #7DA4C0;
 }
-
-.navbar .logoContainer {
+.navbar .logoContainer{
     display: block;
     width: 10rem;
     padding: 0.5rem 0;
-
 }
-
-.navbar .logoContainer img {
+.navbar .logoContainer img{
     width: 100%;
 }
 
-.navbar .searchContainer {
+.navbar .searchContainer{
     width: 40%;
     position: relative;
 }
-
-.navbar .searchContainer input {
+.navbar .searchContainer input{
     width: 100%;
     height: 3rem;
     padding: 0rem 1rem;
     border-radius: 100rem;
     border: 2px solid gainsboro;
     font-size: 1.25rem;
+    
 }
-
-.navbar .searchContainer button {
+.navbar .searchContainer button{
     height: 1.4rem;
     width: 1.4rem;
     border: none;
@@ -54,62 +50,57 @@ ul li:hover {
     position: absolute;
     right: 2rem;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(0,-50%);
 }
-
-.navbar .userProfileContainer {
+.navbar .userProfileContainer{
     display: flex;
     align-items: center;
     padding-right: 2rem;
     position: relative;
     cursor: pointer;
 }
-
-.navbar .userProfileContainer .profileOptions {
+.navbar .userProfileContainer .profileOptions{
     display: none;
     position: absolute;
     top: 140%;
     width: 100%;
-    background-color: #4f88b0e6;
+    background-color: #7DA4C0E6;
+    
 }
-
-.navbar .userProfileContainer .profileOptions ul li {
+.navbar .userProfileContainer .profileOptions ul li{
     padding: 1rem .65rem;
     font-size: 1.25rem;
     transition: background-color ease 500ms;
 }
 
-.navbar .userProfileContainer img {
+.navbar .userProfileContainer img{
     border-radius: 50%;
     margin-right: .5rem;
     height: 3rem;
+    
 }
-
-.aside {
+.aside{
     width: 25%;
     background-color: #99C6E6;
     padding-top: 2.5rem;
-    position: fixed; /* Stick the aside to the left */
-    left: 0; /* Align to the left */
-    top: 85px; /* Adjust top position as needed */
-    height: 100%; /* Occupy full height */
-    overflow-y: auto; 
+    position: absolute;
 }
-
-.aside ul li {
-    margin-bottom: 1.55rem;
+.aside ul li{
+    margin-bottom: 0.25rem;
     font-size: 1.3rem;
     /* background-color: white; */
     transition: background-color ease 500ms;
     padding: .75rem 2rem;
-
+    width: 100px;
+}
+li{
+    width: 30px;
 }
 
-.activePage {
+.activePage{
     position: relative;
 }
-
-.aside ul .activePage::before {
+.aside ul .activePage::before{
     content: '';
     position: absolute;
     left: -13%;
@@ -118,28 +109,26 @@ ul li:hover {
     width: 4.5%;
     background-color: black;
     transform: translate(-50%);
-}
 
-.aside ul li a {
+}
+.aside ul li a{
     color: black;
 }
-
-.aside .contactInfo {
-    bottom: 80px;
-    position: absolute;
+.aside .contactInfo{
+    bottom: 0;
+    position: inherit;
     width: 100%;
     padding: 2rem 1rem;
     font-size: 1rem;
 }
-
 dl {
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: .5rem;
-}
+  }
 
 dt {
-    font-weight: bold;
+font-weight: bold;
 }
 
 .pageLinks {
@@ -280,6 +269,9 @@ select, input {
 }
 /*for add result */
 
+
+
+
 #fileInput {
     display: none; /* Hide the file input visually */
 }
@@ -321,17 +313,47 @@ select, input {
     margin-top: 0px; /* Add margin for separation */
 }
 
-#submitButton {
-    position: fixed; /* or position: absolute; depending on your layout needs */
-    bottom: 10px; /* Adjust the bottom value as needed */
-    right: 10px; /* Adjust the right value as needed */
+#deleteButton {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
     background-color: #4caf50;
     border: none;
     color: #e9eff7;
 }
+#submitButton { 
+    position: fixed;
+    bottom: 10px;
+    right: 70px;
+    background-color: #4caf50;
+    border: none;
+    color: #e9eff7;
+  
+}
 
 .button-container button:hover {
     background-color: #45a049;
+}
+/* Icon Styles */
+.icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.icon i {
+    margin-right: 8px;
+}
+
+.icon:hover {
+    color: #007bff;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
 }
 
 
