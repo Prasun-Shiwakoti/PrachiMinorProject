@@ -122,7 +122,8 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField()
     image = models.ImageField(upload_to='menu_images/', null=True, blank=True)
-
+    special = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.name
 
