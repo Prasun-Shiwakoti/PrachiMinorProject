@@ -41,6 +41,7 @@ function addmenuItem() {
     // Get values from input fields
     var itemName = document.getElementById("itemsName").value;
     var itemPrice = document.getElementById("itemsPrice").value;
+    var itemDescription = document.getElementById("itemsDescription").value;
     var itemImageInput = document.getElementById("itemsImageInput");
 
     // Check if a file is selected
@@ -52,6 +53,7 @@ function addmenuItem() {
         var formData = new FormData();
         formData.append('itemsName', itemName);
         formData.append('itemsPrice', itemPrice);
+        formData.append('itemsDescription', itemDescription);
         formData.append('itemsImageInput', itemImageInput.files[0]);
         var url = document.querySelector('button[data-url]').dataset.url;
         // Send the data to the server using fetch
@@ -84,7 +86,7 @@ function addmenuItem() {
             document.getElementById("itemsName").value = "";
             document.getElementById("itemsPrice").value = "";
             document.getElementById("itemsDescription").value = "";
-            itemImageInput.value = ""; // Clear the file input
+            itemsImageInput.value = ""; // Clear the file input
         })
         .catch(error => {
             console.error('Error:', error);

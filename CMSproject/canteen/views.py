@@ -44,27 +44,27 @@ def orders_view(request):
         raise Http404("Order not found")
 
 @require_POST
-def add_item(request):
-    item_name = request.POST.get('itemsName')
-    item_price = request.POST.get('itemsPrice')
-    item_image = request.FILES.get('itemsImageInput')
-            # Create a new MenuItem object and save it to the database
-    new_item = MenuItem(name=item_name, price=item_price, image=item_image)
-    new_item.save()
-    response_data = {
-        'message': 'Item added successfully',
-        'item': {
-            'name': new_item.name,
-            'price': new_item.price,
-            'image_url': new_item.image.url,
+def add_menuItem(request):
+    try:
+        item_name = request.POST.get('itemsName')
+        item_price = request.POST.get('itemsPrice')
+        item_description = request.POST.get('itemsDescription')
+        item_image = request.FILES.get('itemsImageInput')
+
+        new_item = MenuItem(name=item_name, price=item_price, description=item_description, image=item_image)
+        new_item.save()
+
+        response_data = {
+            'message': 'Item added successfully',
+            'item': {
+                'name': new_item.name,
+                'price': new_item.price,
+                'description': new_item.description,
+                'image_url': new_item.image.url,
+            }
         }
-    }
-    # Send a JSON response back to the JavaScript code
-    return JsonResponse(response_data)
-  
 
-def get_menu_items(request):
-    menu_items = MenuItem.objects.all()
-    data = [{'name': item.name, 'price': item.price, 'image_url': item.image.url} for item in menu_items]
-    return JsonResponse({'menu_items': data})
-
+        return JsonResponse(response_data)
+    except Exception as e:
+        print(f"Error in add_menuItem view: {e}")
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)
