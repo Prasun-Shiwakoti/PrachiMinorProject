@@ -36,3 +36,28 @@ function showProfileOptions(){
         // box.style.width = '220px';
     }
  }
+ var currentItem; // To store the reference to the currently selected item
+
+ function openQuantityPopup(button) {
+     // Store the reference to the clicked button's parent (item) for later use
+     currentItem = button.parentNode;
+
+     // Show the quantity popup
+     document.getElementById("quantityPopup").style.display = "block";
+ }
+
+ function orderItem() {
+     // Get the quantity from the input field
+     var quantity = document.getElementById("quantityInput").value;
+
+     // Check if the quantity is valid
+     if (!isNaN(quantity) && parseInt(quantity) > 0) {
+         alert("You ordered " + quantity + " " + currentItem.querySelector('.itemName').innerText + "(s).");
+         // You can handle the order logic here
+
+         // Hide the quantity popup
+         document.getElementById("quantityPopup").style.display = "none";
+     } else {
+         alert("Invalid quantity. Please enter a valid number greater than 0.");
+     }
+ }

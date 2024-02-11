@@ -6,12 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canteen Staff</title>
-    <style>
-        .buttons{
-            display: flex;
-            flex-direction: column;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>    
     <link rel="stylesheet" type="text/css" href="{% static 'canteen/css/s_canteen.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
@@ -144,100 +140,81 @@
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
+                
                     </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
+                        <button onclick="AddToSpecial(this)">Add to Specials</button>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
                     </div>
+                <div class="item">
+                    <!-- samosa ko photo -->
+                    <img src="/media/samosa.jpg" alt="">
+                    <div class="itemName"> Samosa </div>
+                    <div class="itemPrice"> Rs. 25 /- </div>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
+                        <button onclick="AddToSpecial(this)">Add to Specials</button>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
                 <div class="item">
                     <!-- samosa ko photo -->
                     <img src="/media/samosa.jpg" alt="">
                     <div class="itemName"> Samosa </div>
                     <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
+                        <button onclick="deleteItem(this)">Delete Item</button><br>
                         <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <div class="buttons">
-                        <button onclick="deleteItem(this)">Delete Item</button>
-                        <button onclick="AddToSpecial(this)">Add to Specials</button>
-                    </div>
                 </div>
             </div>
             <div class="menu-change"><h3>Add Menu Items</h3>
