@@ -8,9 +8,10 @@ function adjustHeight(){
     aside.style.height = (windowHeight - navbarHeight) + 'px';
     main.style.height = (windowHeight - navbarHeight) + 'px';
     main.style.maxHeight = (windowHeight - navbarHeight) + 'px';
-
 }
+
 adjustHeight();
+
 
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
