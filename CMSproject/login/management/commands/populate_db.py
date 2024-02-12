@@ -54,7 +54,7 @@ class Command(BaseCommand):
         menu_item1 = MenuItem.objects.create(name='Burger', price=200, description='Delicious burger')
         menu_item2 = MenuItem.objects.create(name='pastry', price=60, description='juicy pastry')
         self.add_image(menu_item1, 'media/burger.webp')        
-        self.add_image(menu_item1, 'media/cake.webp')  
+        self.add_image(menu_item2, 'media/cake.webp')  
 
         # Create Customers for Students
         student_customer1 = Customer.objects.create(student=student1)
