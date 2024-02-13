@@ -12,6 +12,12 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -36,15 +42,17 @@ function showProfileOptions(){
         // box.style.width = '220px';
     }
  }
- var currentItem; // To store the reference to the currently selected item
+ var currentItem = null; // To store the reference to the currently selected item
 
-    function openQuantityPopup(button) {
-        // Store the reference to the clicked button's parent (item) for later use
-        currentItem = button.parentNode;
+ function openQuantityPopup(button) {
+    currentItem = button.parentNode; // Store the reference to the clicked button's parent (item) for later use
+    var quantityPopup = currentItem.querySelector('.quantity-popup');
 
-        // Show the quantity popup
-        document.getElementById("quantityPopup").style.display = "block";
-    }
+    // Show the quantity popup
+    quantityPopup.style.display = "block";
+    quantityPopup.style.top = button.offsetTop + button.offsetHeight + 'px';
+    quantityPopup.style.left = button.offsetLeft + 'px';
+}
 
     function orderItem() {
         // Get the quantity from the input field
@@ -52,12 +60,16 @@ function showProfileOptions(){
 
         // Check if the quantity is valid
         if (!isNaN(quantity) && parseInt(quantity) > 0) {
-            alert("You ordered " + quantity + " " + currentItem.querySelector('.itemName').innerText + "(s).");
+            toastr.success("You ordered " + quantity + " " + currentItem.querySelector('.itemName').innerText + "(s).");
             // You can handle the order logic here
 
             // Hide the quantity popup
-            document.getElementById("quantityPopup").style.display = "none";
+            closePopup();
         } else {
-            alert("Invalid quantity. Please enter a valid number greater than 0.");
+           toastr.error('Please ender a valid quantity.');
         }
+    }
+    function closePopup(){
+        var quantityPopup = currentItem.querySelector('.quantity-popup');
+        quantityPopup.style.display = "none";
     }

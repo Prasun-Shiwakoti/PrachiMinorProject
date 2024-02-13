@@ -12,6 +12,13 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
+
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -117,21 +124,18 @@ function AddToSpecial(button) {
     var menuItemsContainer = document.getElementById("menuItemsContainer");
     menuItemsContainer.appendChild(newItem);
     button.textContent = "Added!";
+    toastr.success(`${itemName} is added to special!`);
 
 }
 
 function deleteItem(button) {
     var item = button.parentNode;
+    var itemName = item.querySelector(".itemName").textContent;
 
     // remove the item
     item.parentNode.removeChild(item);
+    toastr.success(`${itemName} is deleted!`);
 }
 
-function orderItem(button) {
-    // add your ordering logic here
-    var itemName = button.parentNode.querySelector(".itemName").innerText;
-    var itemPrice = button.parentNode.querySelector(".itemPrice").innerText;
 
-    toastr.success(`Ordered ${itemName} for ${itemPrice}`, 'Order Placed');
-} 
 
