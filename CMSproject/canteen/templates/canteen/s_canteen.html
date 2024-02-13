@@ -141,12 +141,11 @@
                             <div class="itemName">{{ item.name }}</div>
                             <div class="itemPrice"> Rs.{{ item.price }}-/</div>
                             <div class="item.description"> {{ item.description }}</div>
-                            <div class="buttons">
-                                <button onclick="deleteItem(this)">Delete Item</button>
-                                <button onclick="AddToSpecial(this)">Add to Specials</button>
-                            </div>
+                            <button onclick="deleteItem(this)">Delete Item</button>
+                            <button onclick="AddToSpecial(this)" data-urls="{% url 'add_specialItem' %}">Add to Specials</button>
                         </div>
                     {% endfor %}
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
             </div>
             <div class="menu-change"><h3>Add Menu Items</h3>
                 <form method="post" enctype="multipart/form-data" id="addItemForm">

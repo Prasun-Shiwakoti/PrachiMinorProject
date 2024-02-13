@@ -1,8 +1,13 @@
 from django.shortcuts import render
 from core.models import Student, Teacher, Admin, Order, MenuItem
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
+import json
 from uuid import UUID
+from django.shortcuts import get_object_or_404
+
 def c_canteen_view(request):
     user_id = request.session.get('user_id')
     if user_id:
@@ -44,6 +49,8 @@ def orders_view(request):
         raise Http404("Order not found")
 
 @require_POST
+@login_required
+@csrf_protect
 def add_menuItem(request):
     try:
         item_name = request.POST.get('itemsName')
@@ -68,3 +75,19 @@ def add_menuItem(request):
     except Exception as e:
         print(f"Error in add_menuItem view: {e}")
         return JsonResponse({'error': 'Internal Server Error'}, status=500)
+
+
+@csrf_protect
+def add_specialItem(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        item_name = data.get('itemName')
+        special_status = data.get('special', False)
+
+        # Update the MenuItem's special status
+        menu_item = get_object_or_404(MenuItem, name=item_name)
+        menu_item.special = special_status
+        menu_item.save()
+
+        return JsonResponse({'message': 'Special status updated successfully.'})
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

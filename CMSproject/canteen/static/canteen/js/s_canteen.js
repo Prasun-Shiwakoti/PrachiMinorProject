@@ -97,27 +97,46 @@ function addmenuItem() {
 }
 function AddToSpecial(button) {
     var itemDiv = button.parentNode;
-
     // get item details
     var itemName = itemDiv.querySelector(".itemName").textContent;
     var itemPrice = itemDiv.querySelector(".itemPrice").textContent;
+    var itemDescription = itemDiv.querySelector(".itemDescription").textContent;
     var itemImageSrc = itemDiv.querySelector("img").src;
+    var urls = document.querySelector('button[data-urls]').dataset.url;
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch(urls, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken, 
+        },
+        body: JSON.stringify({
+            itemName: itemName,
+            special: true
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            // If the response is successful, update the UI
+            var newItem = document.createElement("div");
+            newItem.classList.add("item");
+            newItem.innerHTML = `
+                <img src="${itemImageSrc}" alt="${itemName}">
+                <div class="itemName">${itemName}</div>
+                <div class="itemDescription">${itemDescription}</div>
+                <div class="itemPrice">${itemPrice}</div>
+                <button onclick="deleteItem(this)">Delete Item</button>
+            `;
 
-    // create new div
-    var newItem = document.createElement("div");
-    newItem.classList.add("item");
-    newItem.innerHTML = `
-        <img src="${itemImageSrc}" alt="${itemName}">
-        <div class="itemName">${itemName}</div>
-        <div class="itemPrice">${itemPrice}</div>
-        <button onclick="deleteItem(this)">Delete Item</button>
-    `;
-
-    // add new item to the menuItemsContainer
-    var menuItemsContainer = document.getElementById("menuItemsContainer");
-    menuItemsContainer.appendChild(newItem);
-    button.textContent = "Added!";
-
+            // add new item to the menuItemsContainer
+            var menuItemsContainer = document.getElementById("menuItemsContainer");
+            menuItemsContainer.appendChild(newItem);
+            button.textContent = "Added!";
+        } 
+        else {
+            throw new Error('Failed to update special status');
+        }
+    })
 }
 
 function deleteItem(button) {
