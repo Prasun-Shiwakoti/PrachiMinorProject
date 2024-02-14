@@ -134,44 +134,45 @@ def order_item(request):
         quantity = data.get('quantity')
         customer_id = data.get('customer_id')
         created_at = data.get('created_at')
+    return JsonResponse({'message': 'Item not found'})
 
-        try:
-            student = Student.objects.get(student_id=customer_id)
-            customer_name = student.name
-            customer_image = student.profile_picture.url
-            user_type = 'student'
-        except Student.DoesNotExist:
-            try:
-                teacher = Teacher.objects.get(teacher_id=customer_id)
-                customer_name = teacher.name
-                customer_image = teacher.profile_picture.url
-                user_type = 'teacher'
-            except Teacher.DoesNotExist:
-                return JsonResponse({'message': 'Customer not found'}, status=404)
-        try:
-            item = MenuItem.objects.get(id=item_id)
-            item_name = item.name
-            item_price = item.price
-            item_image = item.image.url
-        except MenuItem.DoesNotExist:
-            return JsonResponse({'message': 'Item not found'}, status=404)
+    #     try:
+    #         student = Student.objects.get(student_id=customer_id)
+    #         customer_name = student.name
+    #         customer_image = student.profile_picture.url
+    #         user_type = 'student'
+    #     except Student.DoesNotExist:
+    #         try:
+    #             teacher = Teacher.objects.get(teacher_id=customer_id)
+    #             customer_name = teacher.name
+    #             customer_image = teacher.profile_picture.url
+    #             user_type = 'teacher'
+    #         except Teacher.DoesNotExist:
+    #             return JsonResponse({'message': 'Customer not found'}, status=404)
+    #     try:
+    #         item = MenuItem.objects.get(id=item_id)
+    #         item_name = item.name
+    #         item_price = item.price
+    #         item_image = item.image.url
+    #     except MenuItem.DoesNotExist:
+    #         return JsonResponse({'message': 'Item not found'}, status=404)
 
-        response_data = {
-            'created_at': created_at.strftime('%Y-%m-%d %H:%M:%S'),
-            'customer_name': customer_name,
-            'customer_image': customer_image,
-            'customer_id':customer_id,
-            'user_type': user_type,
-            'item_id':item_id,
-            'item_name': item_name,
-            'item_price': item_price,
-            'item_image': item_image,
-            'quantity':quantity,
-        }
+    #     response_data = {
+    #         'created_at': created_at.strftime('%Y-%m-%d %H:%M:%S'),
+    #         'customer_name': customer_name,
+    #         'customer_image': customer_image,
+    #         'customer_id':customer_id,
+    #         'user_type': user_type,
+    #         'item_id':item_id,
+    #         'item_name': item_name,
+    #         'item_price': item_price,
+    #         'item_image': item_image,
+    #         'quantity':quantity,
+    #     }
 
-        return JsonResponse(response_data, status=200)
+    #     return JsonResponse(response_data, status=200)
 
-    return JsonResponse({'message': 'Invalid request method'}, status=400)
+    # return JsonResponse({'message': 'Invalid request method'}, status=400)
 
 def confirm_order(request):
     if request.method == 'POST':

@@ -43,7 +43,7 @@ function showProfileOptions(){
     }
  }
 
- var currentItem = null; // To store the reference to the currently selected item
+var currentItem = null; // To store the reference to the currently selected item
 
 function openQuantityPopup(button) {
     currentItem = button.parentNode; // Store the reference to the clicked button's parent (item) for later use
@@ -79,7 +79,6 @@ function orderItem(url) {
         closePopup();
         var created_at = new Date();
         var customerID = currentItem.dataset.customerId;
-        console.log('we now fetch url to views',url);
         fetch(url, {
             method: 'POST',
             headers: {
