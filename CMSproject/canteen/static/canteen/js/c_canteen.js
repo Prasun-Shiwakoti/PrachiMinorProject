@@ -12,6 +12,12 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -37,14 +43,15 @@ function showProfileOptions(){
     }
  }
 
-var currentItem; // To store the reference to the currently selected item
+ var currentItem = null; // To store the reference to the currently selected item
 
 function openQuantityPopup(button) {
-    // Store the reference to the clicked button's parent (item) for later use
-    currentItem = button.parentNode;
-    // Show the quantity popup
-    document.getElementById("quantityPopup").style.display = "block";
-}
+    currentItem = button.parentNode; // Store the reference to the clicked button's parent (item) for later use
+    var quantityPopup = currentItem.querySelector('.quantity-popup');
+
+        // Show the quantity popup
+        document.getElementById("quantityPopup").style.display = "block";
+    }
 
 function getCookie(name) {
     var cookieValue = null;
@@ -67,9 +74,9 @@ function orderItem(url) {
     var itemName = currentItem.querySelector('.itemName').innerText;
     // Check if the quantity is valid
     if (!isNaN(quantity) && parseInt(quantity) > 0) {
-        alert("You ordered " + quantity + " " + itemName + "(s).");
+        toastr.success("You ordered " + quantity + " " + itemName + "(s).");
         console.log('THE ORDER WAS PLACED');
-        document.getElementById("quantityPopup").style.display = "none";
+        closePopup();
         var created_at = new Date();
         var customerID = currentItem.dataset.customerId;
         console.log('we now fetch url to views',url);
@@ -121,9 +128,9 @@ function orderItem(url) {
         });
     }
     else {
-        alert("Invalid quantity. Please enter a valid number greater than 0.");
-    }
-}
+       toastr.error('Please ender a valid quantity.');
+    }}
+
 
 function confirmOrder(data,url){
     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -144,4 +151,9 @@ function confirmOrder(data,url){
     .then(response => {
         //reload the page 
     })
+}
+
+function closePopup(){
+    var quantityPopup = currentItem.querySelector('.quantity-popup');
+    quantityPopup.style.display = "none";
 }

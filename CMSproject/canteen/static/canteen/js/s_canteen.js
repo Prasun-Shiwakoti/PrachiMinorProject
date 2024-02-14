@@ -12,6 +12,13 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
+
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -134,6 +141,12 @@ function AddToSpecial(button) {
             throw new Error('Failed to update special status');
         }
     })
+    // add new item to the menuItemsContainer
+    var menuItemsContainer = document.getElementById("menuItemsContainer");
+    menuItemsContainer.appendChild(newItem);
+    button.textContent = "Added!";
+    toastr.success(`${itemName} is added to special!`);
+
 }
 
 function deleteItem(button, url) {

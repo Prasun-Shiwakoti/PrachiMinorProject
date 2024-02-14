@@ -157,6 +157,7 @@ font-weight: bold;
 .main .menu .itemsContainer .item img{
     border-radius: 50%;
     height: 7rem;
+    width: 7rem;
 }
 .main .menu .itemsContainer{
     font-size: 1.2rem;
@@ -179,6 +180,15 @@ font-weight: bold;
     height: 200px;
     justify-content: space-between;
 }
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 button{
     border-radius: 10%;
     background-color: #7DA4C0;
