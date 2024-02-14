@@ -36,28 +36,93 @@ function showProfileOptions(){
         // box.style.width = '220px';
     }
  }
- var currentItem; // To store the reference to the currently selected item
 
-    function openQuantityPopup(button) {
-        // Store the reference to the clicked button's parent (item) for later use
-        currentItem = button.parentNode;
+var currentItem; // To store the reference to the currently selected item
 
-        // Show the quantity popup
-        document.getElementById("quantityPopup").style.display = "block";
+function openQuantityPopup(button) {
+    // Store the reference to the clicked button's parent (item) for later use
+    currentItem = button.parentNode;
+    // Show the quantity popup
+    document.getElementById("quantityPopup").style.display = "block";
+}
+
+function orderItem(url) {
+    // Get the quantity from the input field
+    var quantity = document.getElementById("quantityInput").value;
+    var itemName = currentItem.querySelector('.itemName').innerText;
+    // Check if the quantity is valid
+    if (!isNaN(quantity) && parseInt(quantity) > 0) {
+        alert("You ordered " + quantity + " " + itemName + "(s).");
+        console.log('THE ORDER WAS PLACED');
+        document.getElementById("quantityPopup").style.display = "none";
+        var created_at = new Date();
+        var customerID = currentItem.dataset.customerId;
+        // fetch(url, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRFToken': csrftoken,
+        //     },
+        //     body: JSON.stringify({
+        //         item_id: currentItem.dataset.itemId,
+        //         quantity: quantity,
+        //         customer_id: customerID,
+        //         created_at: created_at,
+        //     }),
+        // })
+        // .then(response => {
+        //     if (response.ok) {
+        //         return response.json(); 
+        //          // Assuming your server returns JSON data
+        //     } else {
+        //         console.error('Failed to place order');
+        //         throw new Error('Failed to place order');
+        //     }
+        // })
+        // .then(data => {
+        //     var orderInfo = document.createElement('div');
+        //     orderInfo.classList.add('orders'); 
+        
+        //     // Set the inner HTML of the orderInfo div with the order details
+        //     orderInfo.innerHTML = `
+        //         <p>Order: ${data.item_name}</p>
+        //         <img src="${data.item_image}" alt="${data.item_name} Image">
+        //         <p>Quantity: ${data.quantity}</p>
+        //         <p>Created At: ${data.created_at}</p>
+        //         <p>Customer: ${data.customer_name}</p>
+        //         <img src="${data.customer_image}" alt="${data.customer_name} Image">
+        //         <p>User Type: ${data.user_type}</p>
+        //         <button onclick="confirmOrder(data,'{% url 'confirm_order' %}')">Confirm Order</button>
+        //         <button onclick="rejectOrder(data)">Reject Order</button>
+        //     `;
+        
+        //     // Assuming you have a container with ID 'displayOrder' in your HTML
+        //     var displayOrder = document.getElementById('displayOrder');
+        //     displayOrder.appendChild(orderInfo);
+        // })
     }
-
-    function orderItem() {
-        // Get the quantity from the input field
-        var quantity = document.getElementById("quantityInput").value;
-
-        // Check if the quantity is valid
-        if (!isNaN(quantity) && parseInt(quantity) > 0) {
-            alert("You ordered " + quantity + " " + currentItem.querySelector('.itemName').innerText + "(s).");
-            // You can handle the order logic here
-
-            // Hide the quantity popup
-            document.getElementById("quantityPopup").style.display = "none";
-        } else {
-            alert("Invalid quantity. Please enter a valid number greater than 0.");
-        }
+    else {
+        alert("Invalid quantity. Please enter a valid number greater than 0.");
     }
+}
+
+function confirmOrder(data,url){
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+            item_id: data.item_id,
+            quantity: data.quantity,
+            customer_id: data.customer_id,
+            created_at: data.created_at,
+            status:'in-progress'
+        }),
+    })
+    .then(response => {
+        //reload the page 
+    })
+}

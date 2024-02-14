@@ -33,7 +33,7 @@
     <nav class="navbar">
         <picture class="logoContainer"> 
              <!-- college ko logo -->
-            <img src="/media/" alt="logo">
+            <img src="/media/collegeLogo.png/" alt="logo">
         </picture>
         <div class="searchContainer">
             <input type="text" placeholder="Search...">
@@ -41,9 +41,8 @@
             </button>
         </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
-             <!-- profile picture -->
-            <img src="/media/profile.jpeg" alt="profilePic" class="profilePic">
-            <div class="fullName" style="font-size: 1.2rem;">Prachi Shiwakoti</div>
+            <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
             <div class="profileOptions">
                 <ul>
                     <li>
@@ -108,18 +107,23 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
         <div class="orders" id="displayOrder">
-            <div>Name: {{order_instance.name}}</div>
-            <div>Item: {{iorder_instance.item}}</div>
-            <div>Quantity:{{order_instance.quantity}}</div>
-            <div>Total:{{order_instance.totalPrice}}</div>
-            <div>
-                <button>Confirm Order</button>
-                <button>Reject Order</button>
-            </div>
+            {% for order in order_items %}
+                <p>Order: {{order.order_name.name}}</p>
+                <img src="{{order.order_name.image.url}}" alt="{{order.order_name.name}}Image">
+                <p>Quantity: {{order.quantity}}</p>
+                <p>Created At: {{order.created_at}}</p>
+                <p>Customer: {{order.customer_type}}</p> {% comment %}  hamle ahile customer ko naam naii display garya hai type vanera idk i ad something thought for it  {% endcomment %}
+                <img src="{{order.customer_img.url}}" alt=" {{order.customer_type}} Image">
+                <div>
+                    <button>order completed!</button>
+                </div>
+            {% endfor %}
         </div>
 
     </main>
-    <script src="./script.js"></script>
+    {% comment %} <script rc="{% static 'canteen/js/s_canteen.js' %}"></script> {% endcomment %}
+    <script rc="{% static 'canteen/js/c_canteen.js' %}"></script>
 </body>
 </html>

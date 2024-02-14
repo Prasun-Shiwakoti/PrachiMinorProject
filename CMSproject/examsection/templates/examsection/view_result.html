@@ -3,38 +3,114 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>view_result</title>
+    <title>Course Module</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
+    <link rel="stylesheet" type="text/css" href="{% static 'examsection/css/exam.css' %}">
 </head>
+
 <body>
-    <h1> THIS IS FOR THE RESULT VIEWING </h1>
-    <a href="{% url 'viewresult_view' %}"></a>
-    <p>{{admin_instance.name}}</p>
-    <p>{{semester}}</p>
-    <p>{{batch}}</p>
-    <p>{{exam_type}}</p>
-    <p>{{faculty}}</p>
-    <table border="1">
+
+    <nav class="navbar">
+        <picture class="logoContainer">
+            <img src="/media/keclogo.jpg" alt="logo">
+        </picture>
+        <input type="text" class="searchInput" placeholder="Search..." onkeyup="search()">
+        <div class="userProfileContainer" onclick="showProfileOptions()">
+            <img src="{ admin_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
+            <div class="fullName" style="font-size: 1.2rem;">{{ admin_instance.name }} </div>
+            <div class="profileOptions">
+                <ul>
+                    <li>
+                        <a href="#">Account</a>
+                    </li>
+                    <li>
+                        <a href="#">Settings</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="aside">
+        <ul class="pageLinks">
+            <li class="pageLink">
+                <a href="#">Home</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Student Analysis</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Course Info</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Add Results</a>
+            </li>
+            <li class="pageLink">
+                <a class="activePage" href="#">View Results</a>
+            </li>
+
+
+        </ul>
+        <br> <br> <br> <br> <br> <br> <br> <br> <br><br> <br> <br> <br> <br> <br>
+        <div class="contactInfo">
+            <dl>
+                <dt>P.O.Box:</dt>
+                <dd>3928, Kalimati, Kathmandu</dd>
+
+                <dt>Email:</dt>
+                <dd><a href="mailto:info@kecktm.edu.np">info@kecktm.edu.np</a></dd>
+
+                <dt>Contact:</dt>
+                <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
+            </dl>
+        </div>
+    </aside>
+    <br>
+    <div class="table-title">
+        <h3>View Result</h3>
+        <br>
+        <button class="editButton" onclick="editButton()">Edit</button>
+    </div>
+    <br> <br>
+
+    <table class="table-fill">
         <thead>
             <tr>
-                <th>Roll No.</th>
-                <th>Student Name</th>
+                <th class="text-left">Roll No.</th>
+                <th class="text-left">Student Name</th>
                 {% for subject_result in results.0.subjects %}
-                    <th>{{ subject_result.subject.name }}</th>
+                    <th class="text-left">{{ subject_result.subject.name }}</th>
                 {% endfor %}
             </tr>
         </thead>
-        <tbody>
-            {% for student_result in results %}
-                <tr>
-                    <td>{{ student_result.student.rollNo }}</td>
-                    <td>{{ student_result.student.name }}</td>
-                    {% for subject_result in student_result.subjects %}
-                        <td>{{ subject_result.obtained_marks }}</td>
-                    {% endfor %}
-                </tr>
+        <tbody class="table-hover">
+            {% for student in students %}
+            <tr>
+                <td class="text-left">{{ student.roll_no }}</td>
+                <td class="text-left">{{ student.name }}</td>
+                <td class="text-left">{{ student.math_marks }}</td>
+                <td class="text-left">{{ student.english_marks }}</td>
+                <td class="text-left">{{ student.nepali_marks }}</td>
+            </tr>
             {% endfor %}
-        </tbody>        
+        </tbody>
     </table>
+    <button class="saveButton" onclick="saveData()">Save Data</button>
+
+    <script src="{% static 'examsection/js/exam.js' %}"></script>
+    <script src="{% static 'examsection/js/view.js' %}"></script>
 </body>
 </html>

@@ -174,7 +174,6 @@ function fetchViewResult(formData) {
         console.log('regardless of k k vayo, we are onto closing filter now');
         closeFilterModal();
     });
-
 }
 
 //COOKIESSSS

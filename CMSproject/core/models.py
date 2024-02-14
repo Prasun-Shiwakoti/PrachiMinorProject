@@ -90,7 +90,7 @@ class Admin(models.Model):
 
 
     def __str__(self):
-        return f"{self.id}-{self.role}"
+        return f"{self.role}"
 
 class Marks(models.Model):
     EXAM_TYPE_CHOICES = [
@@ -127,20 +127,15 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.name
 
-class Customer(models.Model):
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, null=True, blank=True)
-    teacher = models.OneToOneField(Teacher, on_delete=models.CASCADE, null=True, blank=True)
-
-
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer_id = models.UUIDField()
+    customer_type = models.CharField(max_length=25)
     order_name = models.ForeignKey(MenuItem, on_delete=models.DO_NOTHING)
     quantity = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
         choices=[
-            ('pending', 'Pending'),
             ('in-progress', 'In-Progress'),
             ('completed', 'Completed'),
         ],

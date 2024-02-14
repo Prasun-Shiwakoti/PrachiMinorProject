@@ -97,37 +97,18 @@
             <div class="title">
                 <h3>Today's Special</h3>
             </div>
-            <div class="itemsContainer" id="menuItemsContainer">
-                <div class="item">
-                     <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <button onclick="deleteItem(this)">Delete Item</button>
-                </div>
-                <div class="item">
-                   <!-- samosa ko photo -->
-
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <button onclick="deleteItem(this)">Delete Item</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <button onclick="deleteItem(this)">Delete Item</button>
-                </div>
-                <div class="item">
-                    <!-- samosa ko photo -->
-                    <img src="/media/samosa.jpg" alt="">
-                    <div class="itemName"> Samosa </div>
-                    <div class="itemPrice"> Rs. 25 /- </div>
-                    <button onclick="deleteItem(this)">Delete Item</button>
-                </div>
-    
+            <div class="itemsContainer" id="specialItemsContainer">
+                {% for item in menu_items %}
+                    {% if item.special %}
+                    <div class="item" data-item-id="{{ item.id }}">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                        <div class="itemName">{{ item.name }}</div>
+                        <div class="itemPrice"> Rs.{{ item.price }}-/</div>
+                        <div class="itemDescription"> {{ item.description }}</div>
+                        <button onclick="deleteItem(this, '{% url 'delete_specialItem' %}')">Delete special Item</button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </section>
         <section class="menu">
@@ -136,16 +117,19 @@
             </div>
             <div class="itemsContainer" id="menus">
                     {% for item in menu_items %}
-                        <div class="item">
+                        <div class="item" data-item-id="{{ item.id }}" data-special="{{ item.special }}">
                             <img src="{{ item.image.url }}" alt="{{ item.name }}">
                             <div class="itemName">{{ item.name }}</div>
                             <div class="itemPrice"> Rs.{{ item.price }}-/</div>
-                            <div class="item.description"> {{ item.description }}</div>
-                            <button onclick="deleteItem(this)">Delete Item</button>
+                            <div class="itemDescription"> {{ item.description }}</div>
+                            <button onclick="deleteItem(this, '{% url 'delete_menuItem' %}')">Delete Item</button>
+                            {% if item.special %}
+                            <button> Added! </button>
+                            {% else %}
                             <button onclick="AddToSpecial(this)" data-urls="{% url 'add_specialItem' %}">Add to Specials</button>
+                            {% endif %}
                         </div>
                     {% endfor %}
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
             </div>
             <div class="menu-change"><h3>Add Menu Items</h3>
                 <form method="post" enctype="multipart/form-data" id="addItemForm">

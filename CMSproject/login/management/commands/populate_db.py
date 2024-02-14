@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.core.files import File
 from datetime import date
 import random
-from core.models import CustomUser, Student, Teacher, Admin, Faculty, Subject, Customer, Order, OrderDetail, MenuItem,Marks
+from core.models import CustomUser, Student, Teacher, Admin, Faculty, Subject, Order, OrderDetail, MenuItem,Marks
 import os
 
 class Command(BaseCommand):
@@ -55,20 +55,6 @@ class Command(BaseCommand):
         menu_item2 = MenuItem.objects.create(name='pastry', price=60, description='juicy pastry')
         self.add_image(menu_item1, 'media/burger.webp')        
         self.add_image(menu_item2, 'media/cake.webp')  
-
-        # Create Customers for Students
-        student_customer1 = Customer.objects.create(student=student1)
-
-        # Create Customers for Teachers
-        teacher_customer1 = Customer.objects.create(teacher=teacher1)
-
-        # Create Orders for Students
-        order1 = Order.objects.create(customer=teacher_customer1, order_name=menu_item1, quantity=2, status='completed')
-        order2 = Order.objects.create(customer=student_customer1, order_name=menu_item2, quantity=1, status='in-progress')
-
-        # Create Order Details for Students
-        OrderDetail.objects.create(order=order1, total_amount=menu_item1.price * order1.quantity)
-        OrderDetail.objects.create(order=order2, total_amount=menu_item2.price * order2.quantity)
 
     def add_image(self, instance, file_path):
         with open(file_path, 'rb') as f:

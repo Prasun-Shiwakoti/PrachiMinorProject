@@ -1,3 +1,21 @@
+toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: '300',
+    hideDuration: '1000',
+    timeOut: '5000',
+    extendedTimeOut: '1000',
+    showEasing: 'swing',
+    hideEasing: 'linear',
+    showMethod: 'fadeIn',
+    hideMethod: 'fadeOut'
+};
+
 const aside = document.getElementsByClassName("aside")[0];
 const main = document.getElementsByClassName("main")[0];
 const navbarHeight = document.getElementsByClassName("navbar")[0].clientHeight;
@@ -8,10 +26,9 @@ function adjustHeight(){
     aside.style.height = (windowHeight - navbarHeight) + 'px';
     main.style.height = (windowHeight - navbarHeight) + 'px';
     main.style.maxHeight = (windowHeight - navbarHeight) + 'px';
+
 }
-
 adjustHeight();
-
 
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
@@ -34,7 +51,7 @@ function showProfileOptions(){
         box.style.opacity=1;
         down = true;
         box.style.height = '400px';
-        // box.style.width = '220px';
+    
     }
  }
 function openFilterModal() {
@@ -157,7 +174,6 @@ function fetchViewResult(formData) {
         console.log('regardless of k k vayo, we are onto closing filter now');
         closeFilterModal();
     });
-
 }
 
 //COOKIESSSS
@@ -231,57 +247,83 @@ function importData() {
 function displayData(data) {
     var table = document.getElementById('spreadsheetData');
 
-    // Remove existing rows except the header row (if any)
-    while (table.rows.length > 1) {
-        table.deleteRow(1);
+    // Clear existing rows in the table
+    while (table.rows.length > 0) {
+        table.deleteRow(0);
     }
 
-    // Add data rows
-    for (var j = 1; j < data.length; j++) {
+    // Add data rows including the header row
+    for (var j = 0; j < data.length; j++) {
         var row = table.insertRow();
         for (var k = 0; k < data[j].length; k++) {
             var cell = row.insertCell();
+
+            // Set the first row (index 0) to bold
+            if (j === 0) {
+                cell.style.fontWeight = 'bold';
+            }
+
             cell.textContent = data[j][k];
         }
     }
 }
-// ... (your existing code)
 
-// Submit Data
 function submitData() {
-    var data = getDataFromTable();
+    var table = document.getElementById('spreadsheetData');
+    var rows = table.rows;
+    var data = [];
+
+    // Iterate through the rows of the table and collect data
+    for (var i = 0; i < rows.length; i++) {
+        var rowData = [];
+        var cells = rows[i].cells;
+
+        // Iterate through the cells of each row
+        for (var j = 0; j < cells.length; j++) {
+            rowData.push(cells[j].textContent);
+        }
+
+        data.push(rowData);
+    }
+
+    console.log('Collected Data:', data);
 
     // Check if there is any data to submit
-    if (data.length > 0) {
-        // Example: You can send the data to your server using Fetch API
-        // Adjust the URL and request parameters based on your server endpoint
-        fetch('/submit_data_endpoint', {
+    if (data.length > 1) {  
+        fetch('/submit_data_endpoint', {  //eta pathauni hai data store garna lai ani matra success msg aucha
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ data: data }),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(responseData => {
+            // Optionally, you can perform any additional actions after successful submission
+
             // Display success notification
             toastr.success('Data submitted successfully!');
             console.log('Data submitted successfully:', responseData);
-
-            // Optionally, you can perform any additional actions after successful submission
         })
         .catch(error => {
             // Display error notification
-            toastr.error('Error submitting data. Please try again.');
+            toastr.error(`Error submitting data. ${error.message}`);
             console.error('Error submitting data:', error);
 
             // Optionally, you can handle errors or display an error message
         });
     } else {
         // Display a warning notification if there is no data to submit
-        toastr.warning('No data to submit.');
+        toastr.warning('No data to submit. Please import a file.');
     }
 }
+
+
 
 // Delete File
 function deleteFile() {
@@ -299,11 +341,13 @@ function deleteFile() {
     // Display delete notification
     toastr.info('File deleted successfully!');
 }
-function getDataFromTable() {
-    // Implement this function to extract data from your table
-    // You may need to loop through the table rows and cells to collect the data
-    // Return the data in a suitable format (e.g., array of objects)
-    // Example structure: [{ student_name: 'John', subject: 'Math', marks: 90 }, ...]
-    // Adjust this based on your actual table structure
-    return [];
-}
+
+toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    preventDuplicates: true,
+    positionClass: 'toast-top-right',
+    timeOut: 5000,
+};
+toastr.success('This is a success message');
+
