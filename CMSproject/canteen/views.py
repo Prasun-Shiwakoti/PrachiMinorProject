@@ -7,6 +7,13 @@ from django.http import Http404, JsonResponse
 import json
 from uuid import UUID
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page.
+    return redirect('login') 
 
 def c_canteen_view(request):
     user_id = request.session.get('user_id')
@@ -63,7 +70,7 @@ def orders_view(request):
     return render(request, 'canteen/orders.html', {'admin_instance': admin_instance, 'order_items': order_data})
 
 @require_POST
-@login_required
+# @login_required
 @csrf_protect
 def add_menuItem(request):
     try:
@@ -106,7 +113,7 @@ def add_specialItem(request):
         return JsonResponse({'message': 'Special status updated successfully.'})
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 @csrf_protect
-@login_required
+# @login_required
 def delete_menuItem(request):
     data = json.loads(request.body)
     item_id = data.get('item_id')
@@ -117,7 +124,7 @@ def delete_menuItem(request):
     return JsonResponse({'message': 'Item deleted successfully'})
 
 @csrf_protect
-@login_required
+# @login_required
 def delete_specialItem(request):
     data = json.loads(request.body)
     item_id = data.get('item_id')
@@ -125,6 +132,7 @@ def delete_specialItem(request):
     item = get_object_or_404(MenuItem, id=item_id)
     item.special = False
     item.save()
+    
     return JsonResponse({'message': 'Item deleted successfully'})
 
 def order_item(request):

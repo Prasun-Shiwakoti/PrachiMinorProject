@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'canteen/css/s_canteen.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Font Awesome 5 Free:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
@@ -23,7 +23,6 @@
         </picture>
         <div class="searchContainer">
             <input type="text" placeholder="Search...">
-            </button>
         </div>
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
@@ -40,7 +39,7 @@
                         <a href="#">Privacy</a>
                     </li>
                     <li>
-                        <a href="#">Logout</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -105,7 +104,7 @@
                         <div class="itemName">{{ item.name }}</div>
                         <div class="itemPrice"> Rs.{{ item.price }}-/</div>
                         <div class="itemDescription"> {{ item.description }}</div>
-                        <button onclick="deleteItem(this, '{% url 'delete_specialItem' %}')">Delete special Item</button>
+                        <button onclick="deleteItem(this, `{% url 'delete_specialItem' %}`)">Delete special Item</button>
                     </div>
                     {% endif %}
                 {% endfor %}
@@ -122,7 +121,7 @@
                             <div class="itemName">{{ item.name }}</div>
                             <div class="itemPrice"> Rs.{{ item.price }}-/</div>
                             <div class="itemDescription"> {{ item.description }}</div>
-                            <button onclick="deleteItem(this, '{% url 'delete_menuItem' %}')">Delete Item</button>
+                            <button onclick="deleteItem(this, `{% url 'delete_menuItem' %}`)">Delete Item</button>
                             {% if item.special %}
                             <button> Added! </button>
                             {% else %}
