@@ -268,7 +268,7 @@ function displayData(data) {
     }
 }
 
-function submitData() {
+function submitData(url) {
     var table = document.getElementById('spreadsheetData');
     var rows = table.rows;
     var data = [];
@@ -289,41 +289,62 @@ function submitData() {
     console.log('Collected Data:', data);
 
     // Check if there is any data to submit
-    if (data.length > 1) {  
-        fetch('/submit_data_endpoint', {  //eta pathauni hai data store garna lai ani matra success msg aucha
+    if (data.length > 1) { 
+        var semester = document.getElementById('submitButton').getAttribute('data-semester');
+        var batch = document.getElementById('submitButton').getAttribute('data-batch');
+        var faculty = document.getElementById('submitButton').getAttribute('data-faculty'); 
+        var exam_type = document.getElementById('submitButton').getAttribute('data-exam_type'); 
+        console.log('we got the stupid data');
+        fetch(url, {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
             },
-            body: JSON.stringify({ data: data }),
+            body: JSON.stringify({ 
+                data: data,
+                semester:semester,
+                batch:batch,
+                faculty:faculty,
+                exam_type:exam_type,
+            }),
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json();
+            else{
+                console.log('well response ni success aayo!');
+                return response.json();
+            }
         })
-        .then(responseData => {
-            // Optionally, you can perform any additional actions after successful submission
-
-            // Display success notification
-            toastr.success('Data submitted successfully!');
-            console.log('Data submitted successfully:', responseData);
-        })
-        .catch(error => {
-            // Display error notification
-            toastr.error(`Error submitting data. ${error.message}`);
-            console.error('Error submitting data:', error);
-
-            // Optionally, you can handle errors or display an error message
-        });
+        // .then(Data => {
+        //     toastr.success('Data submitted successfully!');
+        //     console.log('Data submitted successfully:', Data);
+        // })
+        // .catch(error => {
+        //     toastr.error(`Error submitting data. ${error.message}`);
+        //     console.error('Error submitting data:', error);
+        // });
     } else {
-        // Display a warning notification if there is no data to submit
         toastr.warning('No data to submit. Please import a file.');
     }
 }
 
-
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 // Delete File
 function deleteFile() {

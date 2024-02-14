@@ -48,6 +48,8 @@ class Subject(models.Model):
     semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
     faculty = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
     credit_hours = models.PositiveSmallIntegerField()
+    full_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    pass_marks = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return f"{self.name}-{self.faculty}-{self.semester}"
@@ -100,8 +102,6 @@ class Marks(models.Model):
 
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
-    full_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    pass_marks = models.DecimalField(max_digits=5, decimal_places=2)
     obtained_marks = models.DecimalField(max_digits=5, decimal_places=2)
     faculty = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
     semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])

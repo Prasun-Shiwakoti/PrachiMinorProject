@@ -178,10 +178,11 @@
 
     <br> <br>
     <form id="uploadForm" enctype="multipart/form-data">
+        {% csrf_token %}
         <input type="file" id="fileInput" accept=".xlsx, .xls, .csv" style="display: none;">
         <div class="button-container">
             <button type="button" id="importButton" onclick="importData()">Import Spreadsheet</button>
-            <button type="button" id="submitButton" onclick="submitData()">Submit Data</button>
+            <button type="button" id="submitButton" onclick="submitData('{% url 'upload_result_file' %}')" data-semester="{{ semester }}", data-batch="{{ batch }}", data-faculty="{{ faculty }}", data-exam_type="{{ exam_type }}">Submit Data</button>
             <button type="button" id="deleteButton" onclick="deleteFile()">Delete File</button>
         </div>
     </form>

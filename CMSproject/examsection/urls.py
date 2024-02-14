@@ -1,6 +1,6 @@
 from django.urls import path
 from .views.exam import examsection_view
-from .views.add_result import handle_add_result_submission, addresult_view , upload_result_file
+from .views.add_result import handle_add_result_submission, addresult_view , submit_result_file
 from .views.view_result import handle_view_result_submission, viewresult_view
 
 
@@ -11,5 +11,5 @@ urlpatterns =[
     path('', examsection_view, name='examsection_view'),
     path('addresult/<int:semester>/<int:batch>/<str:faculty>/<str:exam_type>/', addresult_view, name='addresult_view'),
     path('viewresult/', viewresult_view, name='viewresult_view'),
-    path('addresultfile/', upload_result_file.as_view(), name='upload_result_file'),
+    path('addresultfile/', submit_result_file, name='upload_result_file'),
 ]
