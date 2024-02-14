@@ -110,12 +110,12 @@
         <input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
         <div class="orders" id="displayOrder">
             {% for order in order_items %}
-                <p>Order: {{order.order_name.name}}</p>
-                <img src="{{order.order_name.image.url}}" alt="{{order.order_name.name}}Image">
-                <p>Quantity: {{order.quantity}}</p>
-                <p>Created At: {{order.created_at}}</p>
-                <p>Customer: {{order.customer_type}}</p> {% comment %}  hamle ahile customer ko naam naii display garya hai type vanera idk i ad something thought for it  {% endcomment %}
-                <img src="{{order.customer_img.url}}" alt=" {{order.customer_type}} Image">
+                <p>Order: {{order.order.order_name.name}}</p>
+                <img src="{{order.order.order_name.image.url}}" alt="{{order.order.order_name.name}}Image">
+                <p>Quantity: {{order.order.quantity}}</p>
+                <p>Created At: {{order.order.created_at}}</p>
+                <p>Customer: {{order.order.customer_type}}</p> {% comment %}  hamle ahile customer ko naam naii display garya hai type vanera idk i ad something thought for it  {% endcomment %}
+                <img src="{{order.order.customer_img.url}}" alt=" {{order.order.customer_type}} Image">
                 <div>
                     <button>order completed!</button>
                 </div>
