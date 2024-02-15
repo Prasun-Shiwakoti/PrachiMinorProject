@@ -1,6 +1,5 @@
 #forms.py
 from django import forms 
-from core.models import Faculty, Marks, Subject
 
 class FilterForm(forms.Form):
     faculty_choices = [

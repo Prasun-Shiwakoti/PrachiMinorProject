@@ -65,6 +65,7 @@ ul li:hover{
     top: 140%;
     width: 100%;
     background-color: #7DA4C0E6;
+    z-index: 100;
     
 }
 .navbar .userProfileContainer .profileOptions ul li{
@@ -92,10 +93,7 @@ ul li:hover{
     /* background-color: white; */
     transition: background-color ease 500ms;
     padding: .75rem 2rem;
-    width: 100px;
-}
-li{
-    width: 30px;
+    width: 100%;
 }
 
 .activePage{
@@ -157,6 +155,7 @@ font-weight: bold;
 .main .menu .itemsContainer .item img{
     border-radius: 50%;
     height: 7rem;
+    width: 7rem;
 }
 .main .menu .itemsContainer{
     font-size: 1.2rem;
@@ -176,15 +175,30 @@ font-weight: bold;
     margin-top: 15px;
     flex-direction: column;
     width: 25%;
-    height: 200px;
+    height: 300px;
     justify-content: space-between;
+    
 }
+
+.menu-change input{
+    height: 25px;
+    margin-bottom: 10px;
+}
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 button{
     border-radius: 10%;
     background-color: #7DA4C0;
     padding: 5px;
     border: #95BEDC;
-    height: 30px;
+    height: fit-content;
     font-size: medium;
     margin: 7px;
 }
@@ -211,6 +225,7 @@ button:hover{
     opacity: 0;
     width:200px;
     border-radius: 10%;
+    z-index: 100;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .text{
@@ -246,4 +261,11 @@ h2{
 }
 h3{
     margin-bottom: 5px;
+} 
+.toast-success {
+    background-color:  #7DA4C0;
+    color: white; 
+}
+.toastr-error {
+    background-color: red;
 }

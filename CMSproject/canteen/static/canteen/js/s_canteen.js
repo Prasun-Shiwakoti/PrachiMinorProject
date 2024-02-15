@@ -12,6 +12,13 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
+
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -67,26 +74,22 @@ function addmenuItem() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            console.log('success vayo hai data base ma halney kaam');
-            // Access the details of the newly added item directly from data
             var newItem = document.createElement("div");
             newItem.className = "item";
             newItem.innerHTML = `
                 <img src="${itemImage}" alt="${itemName}">
                 <div class="itemName">${itemName}</div>
-                <div class="item.description">${data.item.description}</div>
+                <div class="itemDescription">${data.item.description}</div>
                 <div class="itemPrice"> Rs. ${itemPrice} /- </div>
-                <button onclick="deleteItem(this)">Delete Item</button>
-                <button onclick="AddToSpecial(this)">Add to Specials</button>
+                <button onclick="deleteItem(this, '{% url 'delete_menuItem' %}')">Delete Item</button>
+                <button onclick="AddToSpecial(this)" data-urls="{% url 'add_specialItem' %}" >Add to Specials</button>
             `;
-            console.log('aba naya div banaudaii to display the added menu');
-            // Append the new item to the menu container
             document.getElementById("menus").appendChild(newItem);
             // Clear input fields after adding the item
             document.getElementById("itemsName").value = "";
             document.getElementById("itemsPrice").value = "";
             document.getElementById("itemsDescription").value = "";
-            itemsImageInput.value = ""; // Clear the file input
+            itemImageInput.value = ""; // Clear the file input
         })
         .catch(error => {
             console.error('Error:', error);
@@ -95,43 +98,87 @@ function addmenuItem() {
         toastr.error('Please select an image for the item.');
     }
 }
+
 function AddToSpecial(button) {
     var itemDiv = button.parentNode;
-
     // get item details
     var itemName = itemDiv.querySelector(".itemName").textContent;
     var itemPrice = itemDiv.querySelector(".itemPrice").textContent;
+    var itemDescription = itemDiv.querySelector(".itemDescription").textContent;
     var itemImageSrc = itemDiv.querySelector("img").src;
+    var urls = button.dataset.urls;
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch(urls, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken, 
+        },
+        body: JSON.stringify({
+            itemName: itemName,
+            special: true
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            // If the response is successful, update the UI
+            var newItem = document.createElement("div");
+            newItem.classList.add("item");
+            newItem.innerHTML = `
+                <img src="${itemImageSrc}" alt="${itemName}">
+                <div class="itemName">${itemName}</div>
+                <div class="itemDescription">${itemDescription}</div>
+                <div class="itemPrice">${itemPrice}</div>
+                <button onclick="deleteItem(this, '{% url 'delete_specialItem' %}')">Delete special Item</button>
+            `;
 
-    // create new div
-    var newItem = document.createElement("div");
-    newItem.classList.add("item");
-    newItem.innerHTML = `
-        <img src="${itemImageSrc}" alt="${itemName}">
-        <div class="itemName">${itemName}</div>
-        <div class="itemPrice">${itemPrice}</div>
-        <button onclick="deleteItem(this)">Delete Item</button>
-    `;
-
+            // add new item to the menuItemsContainer
+            var specialItemsContainer = document.getElementById("specialItemsContainer");
+            specialItemsContainer.appendChild(newItem);
+            button.textContent = "Added!";
+        } 
+        else {
+            throw new Error('Failed to update special status');
+        }
+    })
     // add new item to the menuItemsContainer
     var menuItemsContainer = document.getElementById("menuItemsContainer");
     menuItemsContainer.appendChild(newItem);
     button.textContent = "Added!";
+    toastr.success(`${itemName} is added to special!`);
 
 }
 
-function deleteItem(button) {
+function deleteItem(button, url) {
     var item = button.parentNode;
+    var itemID = item.dataset.itemId;
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // remove the item
-    item.parentNode.removeChild(item);
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+            item_id: itemID,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            item.parentNode.removeChild(item);
+            location.reload();
+        } else {
+            console.error('Failed to delete item');
+        }
+    });
 }
 
-function orderItem(button) {
-    // add your ordering logic here
-    var itemName = button.parentNode.querySelector(".itemName").innerText;
-    var itemPrice = button.parentNode.querySelector(".itemPrice").innerText;
+// function orderItem(button) {
+//     // add your ordering logic here
+//     var itemName = button.parentNode.querySelector(".itemName").innerText;
+//     var itemPrice = button.parentNode.querySelector(".itemPrice").innerText;
 
-    toastr.success(`Ordered ${itemName} for ${itemPrice}`, 'Order Placed');
-} 
+//     toastr.success(`Ordered ${itemName} for ${itemPrice}`, 'Order Placed');
+// } 
 

@@ -64,7 +64,8 @@ ul li:hover {
     position: absolute;
     top: 140%;
     width: 100%;
-    background-color: #4f88b0e6;
+    background-color: #7DA4C0E6;
+    z-index: 100;
 }
 
 .navbar .userProfileContainer .profileOptions ul li {

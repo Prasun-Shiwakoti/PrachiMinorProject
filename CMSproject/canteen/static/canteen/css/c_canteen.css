@@ -8,6 +8,7 @@ li, a{
     text-decoration: none;
     list-style: none;
     color: black;
+   width: 100%;
 }
 ul li:hover{
     background-color: #95BEDC;
@@ -23,6 +24,7 @@ ul li:hover{
 .navbar .logoContainer{
     display: block;
     width: 10rem;
+    height: fit-content;
     padding: 0.5rem 0;
 }
 .navbar .logoContainer img{
@@ -42,7 +44,7 @@ ul li:hover{
     font-size: 1.25rem;
     
 }
-.navbar .searchContainer button{
+/* .navbar .searchContainer button{
     height: 1.4rem;
     width: 1.4rem;
     border: none;
@@ -51,7 +53,7 @@ ul li:hover{
     right: 2rem;
     top: 50%;
     transform: translate(0,-50%);
-}
+} */
 .navbar .userProfileContainer{
     display: flex;
     align-items: center;
@@ -65,6 +67,7 @@ ul li:hover{
     top: 140%;
     width: 100%;
     background-color: #7DA4C0E6;
+    z-index: 100;
     
 }
 .navbar .userProfileContainer .profileOptions ul li{
@@ -92,11 +95,11 @@ ul li:hover{
     /* background-color: white; */
     transition: background-color ease 500ms;
     padding: .75rem 2rem;
-    width: 100px;
+    width: 100%;
 }
-li{
+/* li{
     width: 30px;
-}
+} */
 
 .activePage{
     position: relative;
@@ -157,11 +160,22 @@ font-weight: bold;
 .main .menu .itemsContainer .item img{
     border-radius: 50%;
     height: 7rem;
+    width: 7rem;
 }
 .main .menu .itemsContainer{
     font-size: 1.2rem;
     text-align: center;
 }
+.item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .main .balanceContainer .title{
     font-size: 1.2rem;
@@ -205,6 +219,7 @@ button:hover{
     width:200px;
     border-radius: 10%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 .text{
     padding: 10px;
@@ -239,12 +254,13 @@ h2{
 }
 .quantity-popup {
     display: none;
-    position: fixed;
+    position: absolute;
     background-color: white;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     border-radius: 10%;
+    width: 200px;
 }
 .quantity-popup label {
     display: block;
@@ -255,4 +271,10 @@ h2{
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
+}
+.toast-success {
+    background-color:  #7DA4C0;
+}
+.toastr-error {
+    background-color: red;
 }

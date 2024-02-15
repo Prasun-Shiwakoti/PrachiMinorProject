@@ -38,22 +38,19 @@ def viewresult_view(request):
     batch = params.get('batch',)
     faculty = params.get('faculty')
     exam_type = params.get('exam_type')
-    print(f'Semester: {semester}, Batch: {batch}, Faculty: {faculty}, Exam Type: {exam_type}')
 
     # Build the dynamic query based on the selected filters
     query_params = {}
     if semester is not None:
-        query_params['semester'] = semester
+        query_params['student__semester'] = semester
     if batch is not None:
         query_params['student__batch'] = batch
     if faculty is not None:
-        query_params['faculty__name'] = faculty
+        query_params['student__faculty__name'] = faculty
     if exam_type is not None:
         query_params['exam_type'] = exam_type
 
-    print(f'Query Params: {query_params}')
     results = Marks.objects.filter(**query_params)
-    print(results)
 
     results_by_student = {}
     for result in results:
