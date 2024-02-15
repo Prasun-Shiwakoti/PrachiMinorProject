@@ -65,6 +65,7 @@ ul li:hover{
     top: 140%;
     width: 100%;
     background-color: #7DA4C0E6;
+    z-index: 100;
     
 }
 .navbar .userProfileContainer .profileOptions ul li{
@@ -197,7 +198,7 @@ button{
     background-color: #7DA4C0;
     padding: 5px;
     border: #95BEDC;
-    height: 30px;
+    height: fit-content;
     font-size: medium;
     margin: 7px;
 }

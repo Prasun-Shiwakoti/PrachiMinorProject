@@ -66,6 +66,7 @@ ul li:hover{
     top: 140%;
     width: 100%;
     background-color: #7DA4C0E6;
+    z-index: 100;
     
 }
 .navbar .userProfileContainer .profileOptions ul li{
@@ -258,6 +259,7 @@ h2{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     border-radius: 10%;
+    width: 200px;
 }
 .quantity-popup label {
     display: block;

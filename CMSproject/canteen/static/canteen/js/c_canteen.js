@@ -13,10 +13,12 @@ function adjustHeight(){
 adjustHeight();
 
 toastr.options = {
-    progressBar: true,
+    progressBar: false,
     positionClass: 'toast-bottom-right',
     preventDuplicates: false,
     onclick: null,
+    showMethod: 'show',
+    hideMethod: 'hide'
 };
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
@@ -49,9 +51,11 @@ function openQuantityPopup(button) {
     currentItem = button.parentNode; // Store the reference to the clicked button's parent (item) for later use
     var quantityPopup = currentItem.querySelector('.quantity-popup');
 
-        // Show the quantity popup
-        document.getElementById("quantityPopup").style.display = "block";
-    }
+    // Show the quantity popup
+    quantityPopup.style.display = "block";
+    quantityPopup.style.top = button.offsetTop + button.offsetHeight + 'px';
+    quantityPopup.style.left = button.offsetLeft + 'px';
+ }
 
 function getCookie(name) {
     var cookieValue = null;
