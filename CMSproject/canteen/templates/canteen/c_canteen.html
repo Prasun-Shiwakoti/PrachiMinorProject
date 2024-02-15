@@ -128,7 +128,7 @@
                                 {% csrf_token %}
                             <label for="quantityInput">Enter Quantity:</label>
                             <input type="number" id="quantityInput" min="1" value="1">
-                            <button onclick="orderItem(`{% url 'order_Item' %}`)" data-customer-id="{% if user_type == 'student' %}{{ student_instance.student_id }}{% elif user_type == 'teacher' %}{{ teacher_instance.teacher_id }}{% endif %}">Order</button>
+                            <button onclick="orderItem(`{% url "order_Item" %}`)" data-customer-id="{% if user_type == 'student' %}{{ student_instance.student_id }}{% elif user_type == 'teacher' %}{{ teacher_instance.teacher_id }}{% endif %}">Order</button>
                             <button onclick="closePopup()">Close</button>
 
                             </form>

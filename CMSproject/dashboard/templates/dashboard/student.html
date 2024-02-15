@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
 </head>
-
 <body>
     <nav class="navbar">
         <picture class="logoContainer">
@@ -99,7 +98,7 @@
                 </select>
                 
                 <div class="button-container">
-                    <button type="button" onclick="applyFilters()">Go</button>
+                    <button id="goButton" type="button" onclick="applyFilters()" data-selected-option ="studentResult">Go</button>
                 </div>
             </form>
         </div>
@@ -115,7 +114,9 @@
 <i class="fas fa-laptop fa-10x"></i>
 <p style="font-size: 2em;">View your result</p>
 </a>
-
+<script>
+    var viewmyResultUrl = "{% url 'viewmyresult' %}";
+</script>
 <script src="{% static 'examsection/js/exam.js' %}"></script>
 </body>
 </html>

@@ -12,6 +12,13 @@ function adjustHeight(){
 }
 adjustHeight();
 
+toastr.options = {
+    progressBar: true,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: false,
+    onclick: null,
+};
+
 function showProfileOptions(){
     if (profileOptions.style.display === '' || profileOptions.style.display === 'none'){
         profileOptions.style.display = 'block';
@@ -67,41 +74,22 @@ function addmenuItem() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-<<<<<<< HEAD
-=======
-            console.log('success vayo hai data base ma halney kaam');
-            // Access the details of the newly added item directly from data
->>>>>>> 69e8dc0f06d9c542a91c275eb9847552fd992db2
             var newItem = document.createElement("div");
             newItem.className = "item";
             newItem.innerHTML = `
                 <img src="${itemImage}" alt="${itemName}">
                 <div class="itemName">${itemName}</div>
-<<<<<<< HEAD
                 <div class="itemDescription">${data.item.description}</div>
                 <div class="itemPrice"> Rs. ${itemPrice} /- </div>
                 <button onclick="deleteItem(this, '{% url 'delete_menuItem' %}')">Delete Item</button>
                 <button onclick="AddToSpecial(this)" data-urls="{% url 'add_specialItem' %}" >Add to Specials</button>
             `;
-=======
-                <div class="item.description">${data.item.description}</div>
-                <div class="itemPrice"> Rs. ${itemPrice} /- </div>
-                <button onclick="deleteItem(this)">Delete Item</button>
-                <button onclick="AddToSpecial(this)">Add to Specials</button>
-            `;
-            console.log('aba naya div banaudaii to display the added menu');
-            // Append the new item to the menu container
->>>>>>> 69e8dc0f06d9c542a91c275eb9847552fd992db2
             document.getElementById("menus").appendChild(newItem);
             // Clear input fields after adding the item
             document.getElementById("itemsName").value = "";
             document.getElementById("itemsPrice").value = "";
             document.getElementById("itemsDescription").value = "";
-<<<<<<< HEAD
             itemImageInput.value = ""; // Clear the file input
-=======
-            itemsImageInput.value = ""; // Clear the file input
->>>>>>> 69e8dc0f06d9c542a91c275eb9847552fd992db2
         })
         .catch(error => {
             console.error('Error:', error);
@@ -153,6 +141,12 @@ function AddToSpecial(button) {
             throw new Error('Failed to update special status');
         }
     })
+    // add new item to the menuItemsContainer
+    var menuItemsContainer = document.getElementById("menuItemsContainer");
+    menuItemsContainer.appendChild(newItem);
+    button.textContent = "Added!";
+    toastr.success(`${itemName} is added to special!`);
+
 }
 
 function deleteItem(button, url) {

@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from core.models import Admin
+from core.models import Admin,Student,Faculty,Marks,Subject
 from django.http import Http404
 from uuid import UUID
 from django.views.decorators.http import require_POST
@@ -8,6 +8,13 @@ from django.views.decorators.csrf import csrf_protect
 from django.views import View
 from examsection.forms.add_result import UploadResultForm
 from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+import pandas as pd
+from datetime import datetime, date
+from decimal import Decimal
+import json
+from django.db import transaction
 
 @csrf_protect
 def handle_add_result_submission(request):
@@ -28,11 +35,17 @@ def handle_add_result_submission(request):
 
 def addresult_view(request, semester, batch, faculty, exam_type):
     user_id = request.session.get('user_id')
-    try:
-        admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
-    except Admin.DoesNotExist:
-        raise Http404("Admin not found")
+    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
+    faculty_instance = get_object_or_404(Faculty, name=faculty)
+    student_instance = get_object_or_404(Student,semester=semester, batch=batch, faculty=faculty_instance )
+    existing_marks = Marks.objects.filter(
+        student =student_instance,
+        exam_type=exam_type
+    )
 
+    # If there are existing entries, return a JSON response
+    if existing_marks.exists():
+        return JsonResponse({'error': 'Cannot add duplicate result entry for the specified parameters.'}, status=400)
     # Pass data to the template
     context = {
         'admin_instance': admin_instance,
@@ -43,12 +56,74 @@ def addresult_view(request, semester, batch, faculty, exam_type):
     }
     return render(request, 'examsection/add_result.html', context)
 
-class upload_result_file(View):
-    template_name = 'add_result.html'
+def submit_result_file(request):
+    print("i was called")
+    user_id = request.session.get('user_id')
+    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                    data = json.loads(request.body.decode('utf-8')).get('data')
+                    semester = int(json.loads(request.body.decode('utf-8')).get('semester'))
+                    batch = json.loads(request.body.decode('utf-8')).get('batch')
+                    faculty = json.loads(request.body.decode('utf-8')).get('faculty')
+                    exam_type = json.loads(request.body.decode('utf-8')).get('exam_type')
+                    
+                    subjects_in_db = Subject.objects.values_list('name', 'full_marks')
+                    subjects_in_db_names = [subject[0].lower() for subject in subjects_in_db]
+                    subjects_in_file = set(element.lower() for element in data[0][2:]) 
 
-    def get(self, request, *args, **kwargs):
-        form = UploadResultForm()
-        return render(request, self.template_name, {'form': form})
+                    missing_subjects = [subject for subject in subjects_in_file if subject not in subjects_in_db_names]
+
+                    if missing_subjects:
+                        raise ValidationError(_('The following subjects do not exist in the database: {}.'.format(', '.join(missing_subjects))))
+
+
+                    students_in_db = Student.objects.values_list('rollNo', 'semester', 'batch', 'faculty')
+                    roll_numbers_in_db_rollNo = [str(rollNo[0]) for rollNo in students_in_db] 
+                    roll_numbers_in_file = [str(row[0]) for row in data[1:]]  
+                    roll_numbers_in_file_sorted = list(roll_numbers_in_file)
+
+                    roll_numbers_in_file_sorted.sort()
+                    roll_numbers_in_db_rollNo.sort()
+
+                    if roll_numbers_in_file_sorted != roll_numbers_in_db_rollNo:
+                        missing_roll_numbers = [roll_number for roll_number in roll_numbers_in_file if roll_number not in roll_numbers_in_db_rollNo]
+                        raise ValidationError(_('One or more roll numbers do not exist in the database. Missing roll numbers: {}.'.format(', '.join(missing_roll_numbers))))
+                    for roll_number in roll_numbers_in_file:
+                        student = Student.objects.get(rollNo=roll_number)
+
+                        print('pass vayexa loose equality haha Check for strict inequality')
+                        if student.semester != semester or student.batch != batch or str(student.faculty.name) != faculty:
+                            raise ValidationError(_('Student {} does not match the provided semester, batch, and faculty.'.format(roll_number)))
+                        for i, subject_name in enumerate(data[0][2:]):
+                                subject_full_marks = next(
+                                    (full_marks,) for name, full_marks in subjects_in_db if name.lower() == subject_name.lower()
+                                )
+                                
+                                subjects_instance = get_object_or_404(Subject, name = subject_name.lower())
+                                subject_full_marks = subject_full_marks[0]
+                                obtained_marks = Decimal(data[roll_numbers_in_file.index(roll_number) + 1][i + 2]) 
+                                
+                                if not (isinstance(obtained_marks, Decimal) and 0 <= obtained_marks <= subject_full_marks):
+                                    raise ValidationError(_('Invalid marks {} for subject {} of student {}. Marks should be an integer between 0 and {}.'.format(obtained_marks, subject_name, roll_number, subject_full_marks)))
+                    
+                                Marks.objects.create(
+                                    subject=subjects_instance,
+                                    student=student,
+                                    obtained_marks=obtained_marks,
+                                    exam_type=exam_type,
+                                    exam_date=date.today(),
+                                    marks_updated_by=admin_instance,  
+                                )
+            return JsonResponse({'message': 'Data saved successfully!'}, status=200)    
+        except ValidationError as ve:
+            return JsonResponse({'error': f'Validation error: {str(ve)}'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Error saving data: {str(e)}'}, status=500)
+    return JsonResponse({'the methos is not get'})
+       
+
 
     
 

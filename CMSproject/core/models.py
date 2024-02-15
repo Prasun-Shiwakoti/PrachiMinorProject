@@ -38,19 +38,27 @@ class User(CustomUser):
     class Meta:
         db_table = 'user'
 
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+    credit_hours = models.PositiveSmallIntegerField()
+    full_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    pass_marks = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Faculty(models.Model):
     name=models.CharField(max_length=100)
     def __str__(self):
         return f"{self.name}"
 
-class Subject(models.Model):
-    name = models.CharField(max_length=100)
+class Facultysubject(models.Model):
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+    subject = models.ManyToManyField(Subject)
     semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
-    faculty = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
-    credit_hours = models.PositiveSmallIntegerField()
-
     def __str__(self):
-        return f"{self.name}-{self.faculty}-{self.semester}"
+        return f"{self.faculty} - {self.semester}"
+
 
 class Student(models.Model):
     student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -100,22 +108,18 @@ class Marks(models.Model):
 
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
-    full_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    pass_marks = models.DecimalField(max_digits=5, decimal_places=2)
     obtained_marks = models.DecimalField(max_digits=5, decimal_places=2)
-    faculty = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
-    semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
     exam_type = models.CharField(max_length=10, choices=EXAM_TYPE_CHOICES)
     exam_date = models.DateField()
     marks_updated_at = models.DateTimeField(auto_now_add=True)
-    marks_updated_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    marks_updated_by = models.ForeignKey(Admin, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def batch(self):
         return self.student.batch
 
     def __str__(self):
-        return f"{self.subject} - {self.student} - {self.exam_type} Exam - Semester {self.semester}"
+        return f"{self.subject} - {self.student}"
 
 class MenuItem(models.Model):
     name = models.CharField(max_length=255)

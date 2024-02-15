@@ -56,7 +56,7 @@ ul li:hover {
     height: 1.4rem;
     width: 1.4rem;
     border: none;
-    background: url(imgs/searchIcon.svg) no-repeat center center/cover;
+    background: url(/media/searchIcon.svg) no-repeat center center/cover;
     position: absolute;
     right: 2rem;
     top: 50%;

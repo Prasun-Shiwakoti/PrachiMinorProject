@@ -55,33 +55,28 @@ function showProfileOptions(){
     }
  }
 function openFilterModal() {
-    console.log('filter opened');
     document.getElementById("filterModal").style.display = "flex";
 }
 
 function closeFilterModal() {
-    console.log('filter closed');
     document.getElementById("filterModal").style.display = "none";
 }
 
 function handleOptionClick(option) {
-    openFilterModal();
-    console.log('option click selected');
     let selectedOption = option;
-    // Attach the selected option to the "Go" button
+    if (selectedOption === 'course Info') {
+        openCourseModal();
+    } else {
+        openFilterModal();
+    }
     document.getElementById('goButton').setAttribute('data-selected-option', selectedOption);
 }
 //GO button
 function applyFilters() {
-    console.log('go button');
-    console.log('filter aplly garney thau, and we are firstly calling value liney funtion');
-
-    var filterMetadata = get_filter_metadata();
     var filterMetadata = get_filter_metadata();
     var formData = new FormData();
     let selectedOption = document.getElementById('goButton').getAttribute('data-selected-option');
 
-    console.log('aba fetch garna lagya');
     console.log('Filter Metadata:', filterMetadata);
 
     Object.entries(filterMetadata).forEach(([key, value]) => {
@@ -101,6 +96,10 @@ function applyFilters() {
             break;
         case 'student_analysis':
             break;
+        case 'course Info':
+            fetchcourseInfo(formData);
+        case 'studentResult':
+            fetchstudentResult(formData);
     }
 }
 function fetchAddResult(formData) {
@@ -109,9 +108,17 @@ function fetchAddResult(formData) {
         body: formData,
     })
     .then(response => {
-        console.log('response lina aako yeta');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        if (response.status === 400) {
+            return response.json().then(data => {
+                toastr.warning(data.error); // Display the specific error message for status 400
+                closeFilterModal();
+            });
+        } else if (response.status === 404) {
+            toastr.warning('Resource not found'); // Display a message for status 404
+            closeFilterModal();
+        } else if (!response.ok) {
+            const errorMessage = `Network response was not ok. Status: ${response.status}, Text: ${response.statusText}`;
+            throw new Error(errorMessage); // Throw a generic error for other statuses
         }
         return response.json();
     })
@@ -122,12 +129,10 @@ function fetchAddResult(formData) {
         window.location.href =`/examsection/addresult/${data.data.semester}/${data.data.batch_number}/${data.data.faculty}/${data.data.exam_type}/`;
     })
     .catch(error => {
-        console.log('error catch garyo');
-        console.error('Fetch error:', error);
+        toastr.warning(error);
         closeFilterModal();
     })
     .finally(() => {
-        console.log('regardless of k k vayo, we are onto closing filter now');
         closeFilterModal();
     });
 }
@@ -146,7 +151,7 @@ function fetchViewResult(formData) {
     .then(data => {
         console.log(data);
         var successMessage = 'showing result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
-        console.log(successMessage);
+        toastr.success(successMessage);
         let url = '/examsection/viewresult/?';
         if (data.data.semester) {
             url += `semester=${data.data.semester}&`;
@@ -175,6 +180,77 @@ function fetchViewResult(formData) {
         closeFilterModal();
     });
 }
+function fetchcourseInfo(formData) {
+    fetch(courseInfoUrl, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        console.log('response lina aako yeta');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        var successMessage = 'showing result of ' + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
+        toastr.success(successMessage);
+        let url = '/examsection/viewcourseInfo/?';
+        if (data.data.semester) {
+            url += `semester=${data.data.semester}&`;
+        }
+        if (data.data.faculty) {
+            url += `faculty=${data.data.faculty}&`;
+        }
+        // Remove the trailing "&" if present
+        url = url.slice(0, -1);
+        console.log('Redirecting to:', url);
+        window.location.href = url;          
+    }) 
+    .catch(error => {
+        console.log('error catch garyo');
+        console.error('Fetch error:', error);
+        closeCourseModal();
+    })
+    .finally(() => {
+        console.log('regardless of k k vayo, we are onto closing filter now');
+        closeCourseModal();
+    });
+}
+function fetchstudentResult(formData){
+    fetch(viewmyResultUrl, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        var successMessage = 'showing result of ' + 'sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
+        toastr.success(successMessage);
+        let url = '/dashboard/student/viewmyResult/?';
+        if (data.data.semester) {
+            url += `semester=${data.data.semester}&`;
+        }
+        if (data.data.faculty) {
+            url += `faculty=${data.data.faculty}&`;
+        }
+        // Remove the trailing "&" if present
+        url = url.slice(0, -1);
+        window.location.href = url;          
+    }) 
+    .catch(error => {
+        console.error('Fetch error:', error);
+        closeFilterModal();
+    })
+    .finally(() => {
+        closeFilterModal();
+    });
+}
 
 //COOKIESSSS
 function getCookie(name) {
@@ -199,27 +275,43 @@ function getCookie(name) {
 }
 
 function openCourseModal() {
-     document.getElementById("courseModal").style.display = "flex";
+     document.getElementById("courseModal").style.display = "flex"; 
 }
 
 function closeCourseModal() {
    document.getElementById("courseModal").style.display = "none";
 }
 
-function get_filter_metadata(){
-    var faculty=document.getElementById('faculty').value;
-    var semester=document.getElementById('semester').value;
-    var examType=document.getElementById('type').value;
-    var batchNumber=document.getElementById('batchNumber').value;
-    console.log('hamle id bata liyou hai filter haru ko value and tala yeslai return garya xa');
-    console.log(faculty, semester, examType, batchNumber);
-    return {
-        faculty:faculty,
-        semester:semester,
-        exam_type:examType,
-        batch_number:batchNumber
-    };
+function get_filter_metadata() {
+    var faculty = document.getElementById('faculty').value;
+    var semester = document.getElementById('semester').value;
+    var examType = document.getElementById('type').value;
+    var batchNumber = document.getElementById('batchNumber').value;
+
+    var filterData = {};
+
+    // Adding attributes to the filterData object if they are not null or empty
+    if (faculty.trim() !== "") {
+        filterData.append('faculty', faculty);
+    }
+
+    if (semester.trim() !== "") {
+        filterData.append('semester', semester);
+    }
+
+    if (examType.trim() !== "") {
+        filterData.append('exam_type', examType);
+    }
+
+    if (batchNumber.trim() !== "") {
+        filterData.append('batch_number', batchNumber);
+    }
+
+    console.log(filterData);
+
+    return filterData;
 }
+    
 function importData() {
     var fileInput = document.getElementById('fileInput');
 
@@ -268,7 +360,7 @@ function displayData(data) {
     }
 }
 
-function submitData() {
+function submitData(url) {
     var table = document.getElementById('spreadsheetData');
     var rows = table.rows;
     var data = [];
@@ -289,41 +381,54 @@ function submitData() {
     console.log('Collected Data:', data);
 
     // Check if there is any data to submit
-    if (data.length > 1) {  
-        fetch('/submit_data_endpoint', {  //eta pathauni hai data store garna lai ani matra success msg aucha
+    if (data.length > 1) { 
+        var semester = document.getElementById('submitButton').getAttribute('data-semester');
+        var batch = document.getElementById('submitButton').getAttribute('data-batch');
+        var faculty = document.getElementById('submitButton').getAttribute('data-faculty'); 
+        var exam_type = document.getElementById('submitButton').getAttribute('data-exam_type'); 
+        console.log('we got the stupid data');
+        fetch(url, {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
             },
-            body: JSON.stringify({ data: data }),
+            body: JSON.stringify({ 
+                data: data,
+                semester:semester,
+                batch:batch,
+                faculty:faculty,
+                exam_type:exam_type,
+            }),
         })
         .then(response => {
             if (!response.ok) {
+                toastr.warning(error);
                 throw new Error(`HTTP error! Status: ${response.status}`);
+            } else {
+                toastr.success('Data submitted successfully!');
             }
-            return response.json();
         })
-        .then(responseData => {
-            // Optionally, you can perform any additional actions after successful submission
-
-            // Display success notification
-            toastr.success('Data submitted successfully!');
-            console.log('Data submitted successfully:', responseData);
-        })
-        .catch(error => {
-            // Display error notification
-            toastr.error(`Error submitting data. ${error.message}`);
-            console.error('Error submitting data:', error);
-
-            // Optionally, you can handle errors or display an error message
-        });
-    } else {
-        // Display a warning notification if there is no data to submit
+    } 
+    else {
         toastr.warning('No data to submit. Please import a file.');
     }
 }
 
-
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 // Delete File
 function deleteFile() {
