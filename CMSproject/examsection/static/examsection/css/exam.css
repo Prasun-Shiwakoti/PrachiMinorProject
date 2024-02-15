@@ -353,7 +353,7 @@ select, input {
     align-items: center;
     text-decoration: none;
     color: #333; /* Change the color as needed */
-    margin-top: 60px; /* Adjust the top margin to lower the icons */
+    margin-top: 100px; /* Adjust the top margin to lower the icons */
     z-index: 1; /* Set a higher z-index to make sure icons render above the navbar */
 }
 
