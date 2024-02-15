@@ -2,6 +2,9 @@ from django.shortcuts import render
 from core.models import Student, Teacher
 from django.http import Http404
 from uuid import UUID
+from examsection.forms.view_result import FilterForm
+from django.http import JsonResponse
+from django.http import QueryDict
 
 def s_dashboard_view(request):
     user_id = request.session.get('user_id')
@@ -41,3 +44,22 @@ def teacher_view(request):
             return render(request, 'dashboard/teacher.html',context)
         except Teacher.DoesNotExist:
             raise Http404 ("teacher not found") 
+
+def handle_viewmy_result_submission(request):
+    if request.method == 'POST':
+        form = FilterForm(request.POST)
+        print(request.POST)
+
+        if form.is_valid():
+            filter_metadata = form.get_filter_metadata()
+            print("Filter Metadata After Validation:", filter_metadata)
+            return JsonResponse({'success': True, 'data': filter_metadata})
+        else:
+            print("Validation Errors:", form.errors)
+            return JsonResponse({'success': False, 'errors': form.errors})
+    else:
+        return JsonResponse({'success': False, 'errors': 'Invalid request method'})
+
+def viewmyResult_view(request):
+    return JsonResponse({'success': False, 'errors': 'Invalid request method'})
+

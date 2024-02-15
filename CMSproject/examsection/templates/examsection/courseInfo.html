@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Module</title>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya SC:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu Mono:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
@@ -86,29 +85,58 @@
 
     <table class="table-fill">
         <thead>
-            <tr>
-                <th class="text-left">Roll No.</th>
-                <th class="text-left">Student Name</th>
-                {% for subject_result in results.0.subjects %}
-                    <th class="text-left">{{ subject_result.subject.name }}</th>
-                {% endfor %}
-            </tr>
+                <tr>
+                    <th class="text-left"><b>Semester</b></th>
+                    <th class="text-left" align="center" colspan="{% if semester is None and faculty == 'Architecture' %}8{% elif faculty != 'Architecture' %}10{% else %}1{% endif %}">
+                        <b>Subjects</b>
+                    </th>
+                </tr>
         </thead>
         <tbody>
-            {% for student_result in results %}
+            {% if semester is None %}
+            {% if faculty == 'Architecture' %}
+                {% for i in semester_range %}
+                    <tr>
+                        <td class="text-left">Semester {{ i }}</td>
+                        {% for result in results %}
+                            {% for subject in result.subject.all %}
+                                {% if result.semester == i|add:0 %}
+                                    <td class="text-left">
+                                        {{ subject.name }}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for i in semester_range %}
+                    <tr>
+                        <td class="text-left">Semester {{ i }}</td>
+                        {% for result in results %}
+                            {% for subject in result.subject.all %}
+                                {% if result.semester == i|add:0 %}
+                                    <td class="text-left">
+                                        {{ subject.name }}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            {% for result in results %}
                 <tr>
-                    <td>{{ student_result.student.rollNo }}</td>
-                    <td>{{ student_result.student.name }}</td>
-                    {% for subject_result in student_result.subjects %}
-                        <td>{{ subject_result.obtained_marks }}</td>
+                    {% for subject in result.subject.all %}
+                        <td class="text-left">{{ subject.name }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
-        </tbody>
+        {% endif %}    
+</tbody>
     </table>
-    <button class="saveButton" onclick="saveData()">Save Data</button>
-    <button class="editButton" onclick="editButton()">Edit</button>
-
+    </table>
    
     <script src="{% static 'examsection/js/view.js' %}"></script>
     <script src="{% static 'examsection/js/exam.js' %}"></script>
