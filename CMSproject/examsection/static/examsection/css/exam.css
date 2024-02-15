@@ -21,10 +21,14 @@ ul li:hover {
     align-items: center;
     padding: 0.25rem 2rem;
     background-color: #7cbff0;
-    position: fixed; /* Stick it to the top */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    width: 100%; /* Occupy full width */
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000; /* Ensure the navbar is above other elements */
+}
+
+body {
+    margin-top: 70px; /* Adjust the margin-top to accommodate the fixed navbar */
 }
 
 .navbar .logoContainer {
@@ -90,16 +94,14 @@ ul li:hover {
     margin-right: .5rem;
     height: 3rem;
 }
-
 .aside {
     width: 25%;
     background-color: #99C6E6;
     padding-top: 2.5rem;
-    position: fixed; /* Stick the aside to the left */
-    left: 0; /* Align to the left */
-    top: 85px; /* Adjust top position as needed */
-    height: 100%; /* Occupy full height */
-    overflow-y: auto; 
+    height: 100%;
+    overflow-y: auto;
+    position: fixed;
+    top: 60px; /* Adjust the top position to start below the navbar */
 }
 
 .aside ul li {
@@ -178,14 +180,7 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
-.content {
-    display: flex;
-    margin-top: auto;
-    margin-left: 250px;
-    padding: 20px;
-    flex-direction: column;
-    align-items: center;
-}
+
 
 .modal {
     display: none;
@@ -348,27 +343,33 @@ select, input {
 .button-container button:hover {
     background-color: #45a049;
 }
-/* Icon Styles */
-.icon {
-    display: inline-flex;
+.container {
+    margin-top: 100px; /* Adjust the margin-top to accommodate the fixed navbar */
+}
+
+.content .icon {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     text-decoration: none;
-    color: #333;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
+    color: #333; /* Change the color as needed */
+    margin-top: 100px; /* Adjust the top margin to lower the icons */
+    z-index: 1; /* Set a higher z-index to make sure icons render above the navbar */
 }
 
-.icon i {
-    margin-right: 8px;
+/* Style the icon */
+.content .icon i {
+    font-size: 5em; /* Adjust the size as needed */
+    margin-bottom: 10px; /* Adjust the spacing between icon and text */
 }
 
-.icon:hover {
-    color: #007bff;
-    background-color: #f0f0f0;
-    transition: background-color 0.3s ease;
+/* Style the text below the icon */
+.content .icon p {
+    font-size: 1.5em; /* Adjust the font size as needed */
+    margin: 0;
 }
+
+
 /* Toastr Notification Styles */
 #toast-container {
     position: fixed;
