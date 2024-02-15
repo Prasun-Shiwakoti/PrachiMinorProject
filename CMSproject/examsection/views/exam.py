@@ -18,6 +18,7 @@ def examsection_view(request):
     
 @csrf_protect
 def handle_course_Info_submisssion(request):
+    print(request.method)
     if request.method == 'POST':
         form = FilterForm(request.POST)
         print(request.POST)

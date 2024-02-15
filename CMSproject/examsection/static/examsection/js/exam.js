@@ -55,6 +55,7 @@ function showProfileOptions(){
     }
  }
 function openFilterModal() {
+    console.log('we opned the filer form');
     document.getElementById("filterModal").style.display = "flex";
 }
 
@@ -64,9 +65,11 @@ function closeFilterModal() {
 
 function handleOptionClick(option) {
     let selectedOption = option;
-    if (selectedOption === 'course Info') {
+    console.log(selectedOption);
+    if (selectedOption === 'course_Info') {
         openCourseModal();
-    } else {
+    } 
+    else {
         openFilterModal();
     }
     document.getElementById('goButton').setAttribute('data-selected-option', selectedOption);
@@ -81,7 +84,9 @@ function applyFilters() {
 
     Object.entries(filterMetadata).forEach(([key, value]) => {
         formData.append(key, value);
+        console.log('yo bhitra wala form', formData);
     });
+    console.log('this is mathi wala form',formData);
 
     // Add CSRF token to the headers
     formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
@@ -96,10 +101,12 @@ function applyFilters() {
             break;
         case 'student_analysis':
             break;
-        case 'course Info':
+        case 'course_Info':
             fetchcourseInfo(formData);
+            break;
         case 'studentResult':
             fetchstudentResult(formData);
+            break;
     }
 }
 function fetchAddResult(formData) {
@@ -108,19 +115,10 @@ function fetchAddResult(formData) {
         body: formData,
     })
     .then(response => {
-        if (response.status === 400) {
-            return response.json().then(data => {
-                toastr.warning(data.error); // Display the specific error message for status 400
-                closeFilterModal();
-            });
-        } else if (response.status === 404) {
-            toastr.warning('Resource not found'); // Display a message for status 404
-            closeFilterModal();
-        } else if (!response.ok) {
-            const errorMessage = `Network response was not ok. Status: ${response.status}, Text: ${response.statusText}`;
-            throw new Error(errorMessage); // Throw a generic error for other statuses
-        }
-        return response.json();
+        if (!response.ok)
+            throw new Error(errorMessage);
+        else
+            return response.json();
     })
     .then(data => {
         console.log(data);
@@ -151,7 +149,7 @@ function fetchViewResult(formData) {
     .then(data => {
         console.log(data);
         var successMessage = 'showing result of ' + data.data.exam_type + ' batch: ' + data.data.batch_number + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
-        toastr.success(successMessage);
+        console.log(successMessage);
         let url = '/examsection/viewresult/?';
         if (data.data.semester) {
             url += `semester=${data.data.semester}&`;
@@ -195,7 +193,7 @@ function fetchcourseInfo(formData) {
     .then(data => {
         console.log(data);
         var successMessage = 'showing result of ' + ', sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
-        toastr.success(successMessage);
+        console.log(successMessage);
         let url = '/examsection/viewcourseInfo/?';
         if (data.data.semester) {
             url += `semester=${data.data.semester}&`;
@@ -219,34 +217,35 @@ function fetchcourseInfo(formData) {
     });
 }
 function fetchstudentResult(formData){
+    console.log(formData);
+    console.log('url yo:', viewmyResultUrl) ;
     fetch(viewmyResultUrl, {
         method: 'POST',
         body: formData,
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            console.log('response not okay aayo');
+            location.reload();
         }
         return response.json();
     })
     .then(data => {
-        var successMessage = 'showing result of ' + 'sem: ' + data.data.semester + ', faculty: ' + data.data.faculty;
-        toastr.success(successMessage);
+        console.log(data);
+        var successMessage = 'showing result of ' + data.data.exam_type + ' batch: ' + ', sem: ' + data.data.semester ;
+        console.log(successMessage);
         let url = '/dashboard/student/viewmyResult/?';
         if (data.data.semester) {
             url += `semester=${data.data.semester}&`;
         }
-        if (data.data.faculty) {
-            url += `faculty=${data.data.faculty}&`;
+        if (data.data.exam_type) {
+            url += `faculty=${data.data.exam_type}&`;
         }
         // Remove the trailing "&" if present
         url = url.slice(0, -1);
-        window.location.href = url;          
+        console.log('Redirecting to:', url);
+        window.location.href = url          
     }) 
-    .catch(error => {
-        console.error('Fetch error:', error);
-        closeFilterModal();
-    })
     .finally(() => {
         closeFilterModal();
     });
@@ -275,6 +274,7 @@ function getCookie(name) {
 }
 
 function openCourseModal() {
+    console.log('we opened fiklter for course');
      document.getElementById("courseModal").style.display = "flex"; 
 }
 
@@ -283,33 +283,38 @@ function closeCourseModal() {
 }
 
 function get_filter_metadata() {
-    var faculty = document.getElementById('faculty').value;
-    var semester = document.getElementById('semester').value;
-    var examType = document.getElementById('type').value;
-    var batchNumber = document.getElementById('batchNumber').value;
+    var faculty = document.getElementById('faculty');
+    var semester = document.getElementById('semester');
+    var examType = document.getElementById('type');
+    var batchNumber = document.getElementById('batchNumber');
 
     var filterData = {};
 
-    // Adding attributes to the filterData object if they are not null or empty
-    if (faculty.trim() !== "") {
-        filterData.append('faculty', faculty);
+   // Check if elements exist before trying to access their values
+    if (faculty && faculty.value != null && faculty.value.trim() !== "") {
+        filterData.faculty = faculty.value;
     }
 
-    if (semester.trim() !== "") {
-        filterData.append('semester', semester);
+    if (semester && semester.value != null && semester.value.trim() !== "") {
+        filterData.semester = semester.value;
     }
 
-    if (examType.trim() !== "") {
-        filterData.append('exam_type', examType);
+    if (examType && examType.value != null && examType.value.trim() !== "") {
+        filterData.exam_type = examType.value;
     }
 
-    if (batchNumber.trim() !== "") {
-        filterData.append('batch_number', batchNumber);
+    if (batchNumber && batchNumber.value != null && batchNumber.value.trim() !== "") {
+        filterData.batch_number = batchNumber.value;
     }
 
-    console.log(filterData);
-
-    return filterData;
+    // Check if there are any non-null values before returning
+    if (Object.keys(filterData).length > 0) {
+        console.log(filterData);
+        return filterData;
+    } else {
+        console.log('No valid filter data found.');
+        return null; // or return an empty object, depending on your requirements
+    }
 }
     
 function importData() {

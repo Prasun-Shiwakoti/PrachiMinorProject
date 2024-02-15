@@ -36,17 +36,24 @@ def handle_add_result_submission(request):
 def addresult_view(request, semester, batch, faculty, exam_type):
     user_id = request.session.get('user_id')
     admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
-    faculty_instance = get_object_or_404(Faculty, name=faculty)
-    student_instance = get_object_or_404(Student,semester=semester, batch=batch, faculty=faculty_instance )
+    print(semester)
+    print(faculty)
+    print(batch)
+    print(exam_type)
+
+    # faculty_instance = get_object_or_404(Faculty, name=faculty)
+    # student_instance = get_object_or_404(Student,semester=semester, batch=batch, faculty=faculty_instance )
+    
     existing_marks = Marks.objects.filter(
-        student =student_instance,
+        student__semester=semester,
+        student__faculty__name=faculty,
+        student__batch=batch,
         exam_type=exam_type
     )
 
     # If there are existing entries, return a JSON response
     if existing_marks.exists():
-        return JsonResponse({'error': 'Cannot add duplicate result entry for the specified parameters.'}, status=400)
-    # Pass data to the template
+        return render(request, 'examsection/exam.html', {'admin_instance': admin_instance})
     context = {
         'admin_instance': admin_instance,
         'semester': semester,

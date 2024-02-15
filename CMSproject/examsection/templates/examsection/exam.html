@@ -56,10 +56,10 @@
                 <a href="{% url 'examsection_view' %}">Home</a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('studnet Analysis')">Student Analysis</a>
+                <a href="#" onclick="handleOptionClick('studnet_analysis')">Student Analysis</a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('course Info')">Course Info </a>
+                <a href="#" onclick="handleOptionClick('course_Info')">Course Info </a>
             </li>
             <li class="pageLink">
                 <a href="#" onclick="handleOptionClick('add_result')">Add Results </a>
@@ -121,7 +121,7 @@
 <div id="courseModal" class="modal">
     <div class="modal-content">
         <h2>Course Information</h2>
-        <form id="courseForm">
+        <form method="POST" id="courseForm">
             {% csrf_token %}
             <label for="courseFaculty">Select Faculty:</label>
             <select id="courseFaculty" name="courseFaculty">

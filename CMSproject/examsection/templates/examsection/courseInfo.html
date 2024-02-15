@@ -94,40 +94,41 @@
         </thead>
         <tbody>
             {% if semester is None %}
-            {% if faculty == 'Architecture' %}
-                {% for i in semester_range %}
-                    <tr>
-                        <td class="text-left">Semester {{ i }}</td>
-                        {% for result in results %}
-                            {% for subject in result.subject.all %}
-                                {% if result.semester == i|add:0 %}
-                                    <td class="text-left">
-                                        {{ subject.name }}
-                                    </td>
-                                {% endif %}
+                {% if faculty == 'Architecture' %}
+                    {% for i in semester_range %}
+                        <tr>
+                            <td class="text-left">Semester {{ i }}</td>
+                            {% for result in results %}
+                                {% for subject in result.subject.all %}
+                                    {% if result.semester == i|add:0 %}
+                                        <td class="text-left">
+                                            {{ subject.name }}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            {% else %}
-                {% for i in semester_range %}
-                    <tr>
-                        <td class="text-left">Semester {{ i }}</td>
-                        {% for result in results %}
-                            {% for subject in result.subject.all %}
-                                {% if result.semester == i|add:0 %}
-                                    <td class="text-left">
-                                        {{ subject.name }}
-                                    </td>
-                                {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% for i in semester_range %}
+                        <tr>
+                            <td class="text-left">Semester {{ i }}</td>
+                            {% for result in results %}
+                                {% for subject in result.subject.all %}
+                                    {% if result.semester == i|add:0 %}
+                                        <td class="text-left">
+                                            {{ subject.name }}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endif %}
         {% else %}
             {% for result in results %}
                 <tr>
+                    <td class="text-left">Semester {{ semester }}</td>
                     {% for subject in result.subject.all %}
                         <td class="text-left">{{ subject.name }}</td>
                     {% endfor %}

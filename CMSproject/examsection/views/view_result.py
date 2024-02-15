@@ -28,10 +28,7 @@ def handle_view_result_submission(request):
     
 def viewresult_view(request):
     user_id = request.session.get('user_id')
-    try:
-        admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
-    except Admin.DoesNotExist:
-        raise Http404("Admin not found")
+    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
     
     params = QueryDict(request.GET.urlencode())
     semester = params.get('semester')
