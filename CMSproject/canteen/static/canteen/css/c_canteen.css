@@ -24,6 +24,7 @@ ul li:hover{
 .navbar .logoContainer{
     display: block;
     width: 10rem;
+    height: fit-content;
     padding: 0.5rem 0;
 }
 .navbar .logoContainer img{
@@ -43,7 +44,7 @@ ul li:hover{
     font-size: 1.25rem;
     
 }
-.navbar .searchContainer button{
+/* .navbar .searchContainer button{
     height: 1.4rem;
     width: 1.4rem;
     border: none;
@@ -52,7 +53,7 @@ ul li:hover{
     right: 2rem;
     top: 50%;
     transform: translate(0,-50%);
-}
+} */
 .navbar .userProfileContainer{
     display: flex;
     align-items: center;

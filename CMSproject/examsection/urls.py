@@ -12,4 +12,5 @@ urlpatterns =[
     path('addresult/<int:semester>/<int:batch>/<str:faculty>/<str:exam_type>/', addresult_view, name='addresult_view'),
     path('viewresult/', viewresult_view, name='viewresult_view'),
     path('addresultfile/', upload_result_file.as_view(), name='upload_result_file'),
+    
 ]
