@@ -22,7 +22,7 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-        <input type="text" class="searchInput" placeholder="Search..." onkeyup="search()">
+        {% comment %} <input type="text" class="searchInput" placeholder="Search..." onkeyup="search()"> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{ admin_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{ admin_instance.name }} </div>
@@ -38,7 +38,7 @@
                         <a href="#">Privacy</a>
                     </li>
                     <li>
-                        <a href="#">Logout</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -48,35 +48,23 @@
     <aside class="aside">
         <ul class="pageLinks">
             <li class="pageLink">
-                <a href="#">Home</a>
+                <a href="{% url 'examsection_view' %}">Home</a>
             </li>
             <li class="pageLink">
-                <a href="#">Student Analysis</a>
+                <a onclick="handleOptionClick('studnet_analysis')">Student Analysis</a>
             </li>
             <li class="pageLink">
-                <a href="#">Course Info</a>
+                <a onclick="handleOptionClick('course_Info')">Course Info</a>
             </li>
             <li class="pageLink">
-                <a href="#">Add Results</a>
+                <a onclick="handleOptionClick('add_result')">Add Results</a>
             </li>
             <li class="pageLink">
-                <a class="activePage" href="#">View Results</a>
+                <a class="activePage" onclick="handleOptionClick('view_result')">View Results</a>
             </li>
 
 
         </ul>
-        <div class="contactInfo">
-            <dl>
-                <dt>P.O.Box:</dt>
-                <dd>3928, Kalimati, Kathmandu</dd>
-
-                <dt>Email:</dt>
-                <dd><a href="mailto:info@kecktm.edu.np">info@kecktm.edu.np</a></dd>
-
-                <dt>Contact:</dt>
-                <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
-            </dl>
-        </div>
     </aside>
     <br>
     <div class="table-title">

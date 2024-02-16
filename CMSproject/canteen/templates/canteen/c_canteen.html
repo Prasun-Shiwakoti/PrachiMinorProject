@@ -20,11 +20,11 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-        <div class="searchContainer">
+        {% comment %} <div class="searchContainer">
             <input type="text" placeholder="Search...">
             <!-- <button class="search_button"> -->
             </button>
-        </div>
+        </div> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             {% if user_type == 'student' %}
                 <img src="{{student_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
@@ -76,8 +76,11 @@
             <li class="pageLink">
                 <a href="#">Library</a>
             </li>
+            <li class="pageLink">
+                <a href="#">Faculty</a>
+            </li>
         </ul>
-        <div class="contactInfo">
+        {% comment %} <div class="contactInfo">
             <dl>
                 <dt>P.O.Box:</dt>
                 <dd>3928, Kalimati, Kathmandu</dd>
@@ -88,7 +91,7 @@
                 <dt>Contact:</dt>
                 <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
             </dl>
-        </div>
+        </div> {% endcomment %}
     </aside>
     <main class="main">
         <div class="top">

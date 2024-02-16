@@ -26,13 +26,18 @@
             <a href="#">Logout</a>
         </div>
     </nav>
+    {% for message in messages %}
+        {% if 'logout' in message.tags %}
+            <div class="{{ message.tags }}">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
 
     <div class="main">
         <h1>Login</h1>
         <div class="login-form">
             <form action="{% url 'loginaction' %}" method="post">
                 {% csrf_token %}
-                <label for="username">Name</label><br>
+                <label for="username">Email</label><br>
                 <input type="text" id="email" name="email" required><br><br>
 
                 <label for="password">Password</label><br>

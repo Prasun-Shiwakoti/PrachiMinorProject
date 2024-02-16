@@ -7,13 +7,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import JsonResponse
 from django.http import QueryDict
 from core.models import Faculty, Subject, Facultysubject
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def examsection_view(request):
-    user_id = request.session.get('user_id')
-    try:
-        admin_instance = Admin.objects.get(admin_id=UUID(user_id))
+    user = request.user  # Django's authenticated user
+    if user.usertype == 'admin':
+        admin_instance = user.admin
         return render(request, 'examsection/exam.html', {'admin_instance': admin_instance})
-    except Admin.DoesNotExist:
+    else:
         raise Http404("Admin not found")
     
 @csrf_protect
@@ -32,13 +33,10 @@ def handle_course_Info_submisssion(request):
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
-
+@login_required
 def courseInfo_view(request):
-    user_id = request.session.get('user_id')
-    try:
-        admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
-    except Admin.DoesNotExist:
-        raise Http404("Admin not found")
+    user = request.user  # Django's authenticated user
+    admin_instance = user.admin
     
     params = QueryDict(request.GET.urlencode())
     semester = params.get('semester')

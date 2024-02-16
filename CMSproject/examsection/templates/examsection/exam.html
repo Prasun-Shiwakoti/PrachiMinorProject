@@ -24,11 +24,11 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-        <div class="searchContainer">
+        {% comment %} <div class="searchContainer">
             <input type="text" placeholder="Search...">
             <button class="search_button">
             </button>
-        </div>
+        </div> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{ admin_instance.profile_picture.url }}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{ admin_instance.name }}</div>
@@ -44,7 +44,7 @@
                         <a href="#">Privacy</a>
                     </li>
                     <li>
-                        <a href="#">Logout</a>
+                        <a href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -56,16 +56,16 @@
                 <a href="{% url 'examsection_view' %}">Home</a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('studnet_analysis')">Student Analysis</a>
+                <a onclick="handleOptionClick('studnet_analysis')">Student Analysis</a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('course_Info')">Course Info </a>
+                <a onclick="handleOptionClick('course_Info')">Course Info </a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('add_result')">Add Results </a>
+                <a onclick="handleOptionClick('add_result')">Add Results </a>
             </li>
             <li class="pageLink">
-                <a href="#" onclick="handleOptionClick('view_result')">View Results</a>
+                <a onclick="handleOptionClick('view_result')">View Results</a>
             </li>
         
         </ul>

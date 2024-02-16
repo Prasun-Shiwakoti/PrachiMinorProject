@@ -21,9 +21,9 @@
         <picture class="logoContainer"> 
             <img src="/media/collegeLogo.png/" alt="logo">
         </picture>
-        <div class="searchContainer">
+        {% comment %} <div class="searchContainer">
             <input type="text" placeholder="Search...">
-        </div>
+        </div> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{admin_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{admin_instance.name}}</div>
@@ -58,7 +58,7 @@
             </li>
           
         </ul>
-        <div class="contactInfo">
+        {% comment %} <div class="contactInfo">
             <dl>
                 <dt>P.O.Box:</dt>
                 <dd>3928, Kalimati, Kathmandu</dd>
@@ -69,7 +69,7 @@
                 <dt>Contact:</dt>
                 <dd>01-5372833, 9863035297, 01-5372833, 01-5372653</dd>
             </dl>
-        </div>
+        </div> {% endcomment %}
     </aside>
     <main class="main">
         <div class="top">

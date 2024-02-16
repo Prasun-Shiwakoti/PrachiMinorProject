@@ -5,7 +5,7 @@ from .views.changepassword import newpassword_view, recoverpassword_view
 
 urlpatterns = [
     path ('', login_view , name='login'),
-    path('loginaction/', loginaction, name='loginaction'),
+    path('CMSlogin/', loginaction, name='loginaction'),
     path('newpassword/', newpassword_view, name='newpassword'),
     path('recoverpassword/', recoverpassword_view, name='recoverpassword'),
 ]

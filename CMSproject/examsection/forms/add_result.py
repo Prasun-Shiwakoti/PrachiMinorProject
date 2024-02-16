@@ -51,35 +51,4 @@ class UploadResultForm(forms.Form):
             else:
                 raise forms.ValidationError("Invalid file type. Please upload an Excel (.xlsx, .xls) or CSV file.")
 
-            required_columns = ['Roll No.', 'Student Name', 'Subject', 'Marks']
-            for column in required_columns:
-                if column not in df.columns:
-                    raise forms.ValidationError(f"Column '{column}' is missing. Please provide valid columns.")
-
-            for roll_no in df['Roll No.']:
-                if not self.is_valid_roll_no(roll_no):
-                    raise forms.ValidationError(f"Invalid 'Roll No.': {roll_no}")
-
-            for index, row in df.iterrows():
-                subject = row['Subject']
-                marks = row['Marks']
-
-                # Check if 'Marks' is a positive integer
-                if not isinstance(marks, int) or marks < 0:
-                    raise forms.ValidationError(f"Invalid marks for subject '{subject}': {marks}")
-
-                # Add your custom validation logic for subject marks and full marks
-                if not self.is_valid_subject_marks(subject, marks):
-                    raise forms.ValidationError(f"Invalid marks for subject '{subject}': {marks}")
-
-        return file
-
-    def is_valid_roll_no(self, roll_no):
-        # Add your custom validation logic for roll numbers
-        return True
-
-    def is_valid_subject_marks(self, subject, marks):
-        # Add your custom validation logic for subject marks and full marks
-        return True
-
         

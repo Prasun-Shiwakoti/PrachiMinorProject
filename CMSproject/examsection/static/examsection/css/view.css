@@ -164,6 +164,8 @@ font-weight: bold;
 /* Table Styles */
 
 .table-title {
+    position: relative;
+    left: 10%;
     display: block;
     margin: auto;
     max-width: 600px;
@@ -182,10 +184,12 @@ font-weight: bold;
 }
 
 .table-fill {
+    position: relative;
+    left : 10%;
     background: white;
     border-radius: 3px;
     border-collapse: collapse;
-    height: 320px;
+    height: fit-content;
     margin: auto;
     max-width: 600px;
     padding: 5px;

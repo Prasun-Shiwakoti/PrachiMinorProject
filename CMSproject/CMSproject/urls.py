@@ -12,6 +12,7 @@ urlpatterns = [
     path('examsection/', include('examsection.urls')),
     path('canteen/', include('canteen.urls')),
     path('', login_view, name='main'),
+    path('accounts/', include('django.contrib.auth.urls')),
     # Add other urlpatterns if needed
 ]
 

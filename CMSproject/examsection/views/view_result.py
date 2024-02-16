@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from collections import defaultdict
+from django.contrib.auth.decorators import login_required
 
 @csrf_protect
 def handle_view_result_submission(request):
@@ -25,10 +26,12 @@ def handle_view_result_submission(request):
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
-    
+
+@login_required    
 def viewresult_view(request):
-    user_id = request.session.get('user_id')
-    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
+    user = request.user  # Django's authenticated user
+    if user.usertype == 'admin':
+        admin_instance = user.admin
     
     params = QueryDict(request.GET.urlencode())
     semester = params.get('semester')

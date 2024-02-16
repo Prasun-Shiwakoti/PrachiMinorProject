@@ -67,10 +67,10 @@
              <!-- college ko logo -->
             <img src="/media//collegeLogo.png" alt="logo">
         </picture>
-        <div class="searchContainer">
+        {% comment %} <div class="searchContainer">
             <input type="text" placeholder="Search...">
             </button>
-        </div>
+        </div> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             {% if user_type == 'student' %}
                 <img src="{{student_instance.profile_picture.url}}" alt="profilePic" class="profilePic">

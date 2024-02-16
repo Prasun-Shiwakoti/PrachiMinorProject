@@ -22,11 +22,11 @@
         <picture class="logoContainer">
             <img src="/media/collegeLogo.png" alt="logo">
         </picture>
-        <div class="searchContainer">
+        {% comment %} <div class="searchContainer">
             <input type="text" placeholder="Search...">
             <button class="search_button">
             </button>
-        </div>
+        </div> {% endcomment %}
         <div class="userProfileContainer" onclick="showProfileOptions()">
             <img src="{{teacher_instance.profile_picture.url}}" alt="profilePic" class="profilePic">
             <div class="fullName" style="font-size: 1.2rem;">{{teacher_instance.name}}</div>
@@ -63,11 +63,14 @@
                 <a href="#">Student</a>
             </li>
             <li class="pageLink">
-                <a class="activePage" href="{% url 's_dashboard' %}">Exam</a>
+                <a class="activePage" href="{% url 'teacher_view' %}">Exam</a>
             </li>
 
             <li class="pageLink">
                 <a href="#">Library</a>
+            </li>
+            <li class="pageLink">
+                <a href="#">Faculty</a>
             </li>
         
         </ul>

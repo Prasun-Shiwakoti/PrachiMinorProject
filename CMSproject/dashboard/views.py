@@ -5,47 +5,42 @@ from uuid import UUID
 from examsection.forms.view_result import FilterForm
 from django.http import JsonResponse
 from django.http import QueryDict
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
+@login_required
 def s_dashboard_view(request):
-    user_id = request.session.get('user_id')
-    if user_id:
-        try:
-            student_instance = Student.objects.get(student_id=UUID(user_id))
-            context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student'}
-            return render(request, 'dashboard/s_dashboard.html', context)
-        except Student.DoesNotExist:
-            try:
-                # If Student is not found, attempt to get a Teacher instance
-                teacher_instance = Teacher.objects.get(teacher_id=UUID(user_id))
-                context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher'}
-                return render(request, 'dashboard/s_dashboard.html', context)
-            except Teacher.DoesNotExist:
-                raise Http404("User not found")
+    user = request.user  # Django's authenticated user
+    if user.usertype == 'student':
+        context = {'student_instance': user.student, 'teacher_instance': None, 'user_type': 'student'}
+        return render(request, 'dashboard/s_dashboard.html', context)
+    elif user.usertype == 'teacher':
+        context = {'student_instance': None, 'teacher_instance': user.teacher, 'user_type': 'teacher'}
+        return render(request, 'dashboard/s_dashboard.html', context)
     else:
-        raise Http404("User ID not found in session")
+        raise Http404("Invalid user type")
 
-     
+@login_required
 def student_view(request):
-    user_id = request.session.get('user_id')
-    if user_id:
-        try:
-            student_instance = Student.objects.get(student_id=UUID(user_id))
-            context = {'student_instance': student_instance}
-            return render(request, 'dashboard/student.html', context)
-        except Student.DoesNotExist:
-            raise Http404("User not found")
-    
-def teacher_view(request):
-    user_id = request.session.get('user_id')
-    if user_id:
-        try:
-            teacher_instance=Teacher.objects.get(teacher_id=UUID(user_id))
-            context={'teacher_instance':teacher_instance}
-            return render(request, 'dashboard/teacher.html',context)
-        except Teacher.DoesNotExist:
-            raise Http404 ("teacher not found") 
+    user = request.user  # Django's authenticated user
 
+    if user.usertype == 'student':
+        context = {'student_instance': user.student}
+        return render(request, 'dashboard/student.html', context)
+    else:
+        raise Http404("Invalid user type")
+
+@login_required
+def teacher_view(request):
+    user = request.user  # Django's authenticated user
+
+    if user.usertype == 'teacher':
+        context = {'teacher_instance': user.teacher}
+        return render(request, 'dashboard/teacher.html', context)
+    else:
+        raise Http404("Invalid user type")
+
+@login_required
 def handle_viewmy_result_submission(request):
     if request.method == 'POST':
         form = FilterForm(request.POST)
@@ -61,9 +56,10 @@ def handle_viewmy_result_submission(request):
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
 
+
 def viewmyResult_view(request):
-    user_id = request.session.get('user_id')
-    student_instance = get_object_or_404(Student, student_id=UUID(user_id))
+    user = request.user  # Django's authenticated user
+    student_instance = user.student
     
     params = QueryDict(request.GET.urlencode())
     semester = params.get('semester')

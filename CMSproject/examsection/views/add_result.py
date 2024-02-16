@@ -1,11 +1,8 @@
 from django.http import JsonResponse
-from core.models import Admin,Student,Faculty,Marks,Subject
-from django.http import Http404
-from uuid import UUID
+from core.models import Student,Marks,Subject
 from django.views.decorators.http import require_POST
 from examsection.forms.add_result import FilterForm
 from django.views.decorators.csrf import csrf_protect
-from django.views import View
 from examsection.forms.add_result import UploadResultForm
 from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import ValidationError
@@ -15,6 +12,7 @@ from datetime import datetime, date
 from decimal import Decimal
 import json
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 @csrf_protect
 def handle_add_result_submission(request):
@@ -32,18 +30,15 @@ def handle_add_result_submission(request):
     else:
         return JsonResponse({'success': False, 'errors': 'Invalid request method'})
 
-
+@login_required
 def addresult_view(request, semester, batch, faculty, exam_type):
-    user_id = request.session.get('user_id')
-    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
+    user = request.user  # Django's authenticated user
+    if user.usertype == 'admin':
+        admin_instance = user.admin
     print(semester)
     print(faculty)
     print(batch)
     print(exam_type)
-
-    # faculty_instance = get_object_or_404(Faculty, name=faculty)
-    # student_instance = get_object_or_404(Student,semester=semester, batch=batch, faculty=faculty_instance )
-    
     existing_marks = Marks.objects.filter(
         student__semester=semester,
         student__faculty__name=faculty,
@@ -54,6 +49,7 @@ def addresult_view(request, semester, batch, faculty, exam_type):
     # If there are existing entries, return a JSON response
     if existing_marks.exists():
         return render(request, 'examsection/exam.html', {'admin_instance': admin_instance})
+    
     context = {
         'admin_instance': admin_instance,
         'semester': semester,
@@ -63,10 +59,11 @@ def addresult_view(request, semester, batch, faculty, exam_type):
     }
     return render(request, 'examsection/add_result.html', context)
 
+@login_required
 def submit_result_file(request):
-    print("i was called")
-    user_id = request.session.get('user_id')
-    admin_instance = get_object_or_404(Admin, admin_id=UUID(user_id))
+    user = request.user  # Django's authenticated user
+    if user.usertype == 'admin':
+        admin_instance = user.admin
     if request.method == 'POST':
         try:
             with transaction.atomic():

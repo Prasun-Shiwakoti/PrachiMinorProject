@@ -4,19 +4,10 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MaxValueValidator
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth import get_user_model
 
-
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, usertype=None, userId=None):
-        if not email:
-            raise ValueError('The email must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, usertype=usertype)
-        user.set_password(password)  
-        user.save(using=self._db)
-        return user
-
-def validate_user_type(self,value):
+def validate_user_type(value):
         allowed_user_types = ['student', 'teacher', 'admin']
         if value.lower() not in allowed_user_types:
             raise ValidationError(
@@ -24,19 +15,24 @@ def validate_user_type(self,value):
                 params={'value': value},
             )
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, usertype=None):
+        if not email:
+            raise ValueError('The email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, usertype=usertype)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
 class CustomUser(AbstractBaseUser):
-    #id default hunxa django ma as pk
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
     usertype = models.CharField(max_length=20, validators=[validate_user_type])
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
-
-class User(CustomUser):
-    class Meta:
-        db_table = 'user'
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
@@ -78,13 +74,6 @@ class Teacher(models.Model):
     name = models.CharField(max_length=100)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     subject =models.ManyToManyField(Subject)
-
-    # delete garyo vaney model k hunxa
-    # def delete(self, *args, **kwargs):
-    #     # Remove the associated file when the record is deleted
-    #     storage, path = self.profile_picture.storage, self.profile_picture.path
-    #     super(Teacher, self).delete(*args, **kwargs)
-    #     storage.delete(path)
 
     def __str__(self):
         return f"{self.subject}-{self.name}"
@@ -132,8 +121,7 @@ class MenuItem(models.Model):
         return self.name
 
 class Order(models.Model):
-    customer_id = models.UUIDField()
-    customer_type = models.CharField(max_length=25)
+    customer = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
     order_name = models.ForeignKey(MenuItem, on_delete=models.DO_NOTHING)
     quantity = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -150,8 +138,11 @@ class Order(models.Model):
         return f"{self.customer} - {self.status}"
     
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    def save(self, *args, **kwargs):
+        self.total_amount = self.order.quantity * self.order.price
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.order} - {self.total_amount}"

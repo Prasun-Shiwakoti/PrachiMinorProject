@@ -9,68 +9,71 @@ from uuid import UUID
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.contrib import messages
+from django.http import Http404
 
 def logout_view(request):
     logout(request)
-    # Redirect to a success page.
-    return redirect('login') 
-
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('login:login')
+ 
+@login_required
 def c_canteen_view(request):
-    user_id = request.session.get('user_id')
-    if user_id:
-        menu_items = MenuItem.objects.all()
-        try:
-            student_instance = Student.objects.get(student_id=UUID(user_id))
-            context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student','menu_items': menu_items}
-            return render(request, 'canteen/c_canteen.html', context)
-        except Student.DoesNotExist:
-            try:
-                # If Student is not found, attempt to get a Teacher instance
-                teacher_instance = Teacher.objects.get(teacher_id=UUID(user_id))
-                context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher', 'menu_items': menu_items}
-                return render(request, 'canteen/c_canteen.html', context)
-            except Teacher.DoesNotExist:
-                raise Http404("User not found")
-    else:
-        raise Http404("User ID not found in session")
-
-def s_canteen_view(request):
-    try:
-        user_id = request.session.get('user_id')
-        admin_instance = Admin.objects.get(admin_id=UUID(user_id))
-    except Admin.DoesNotExist:
-        raise Http404("Admin not found")
+    user = request.user  # Django's authenticated user
     menu_items = MenuItem.objects.all()
-    # Pass menu items along with admin_instance to the template
-    return render(request, 'canteen/s_canteen.html', {'admin_instance': admin_instance, 'menu_items': menu_items})
 
+    if user.usertype == 'student':
+        student_instance = user.student
+        context = {'student_instance': student_instance, 'teacher_instance': None, 'user_type': 'student', 'menu_items': menu_items}
+        return render(request, 'canteen/c_canteen.html', context)
+    elif user.usertype == 'teacher':
+        teacher_instance = user.teacher
+        context = {'student_instance': None, 'teacher_instance': teacher_instance, 'user_type': 'teacher', 'menu_items': menu_items}
+        return render(request, 'canteen/c_canteen.html', context)
+    else:
+        raise Http404("User not found")
+    
+@login_required
+def s_canteen_view(request):
+    user = request.user  # Django's authenticated user
+    menu_items = MenuItem.objects.all()
 
-def orders_view(request):
-    try:
-        user_id = request.session.get('user_id')
-        admin_instance = Admin.objects.get(admin_id=UUID(user_id))
-    except Admin.DoesNotExist:
+    if user.usertype == 'admin':
+        admin_instance = user.admin
+        context = {'admin_instance': admin_instance, 'menu_items': menu_items}
+        return render(request, 'canteen/s_canteen.html', context)
+    else:
         raise Http404("Admin not found")
+    
+@login_required
+def orders_view(request):
+    user = request.user  # Django's authenticated user
     order_items = Order.objects.all()
-    order_data=[]
+    order_data = []
+
     for order in order_items:
+        customer = order.customer
         try:
-            student_instance = Student.objects.get(student_id=order.customer_id)
-            customer_img = student_instance.image.url
-        except Student.DoesNotExist:
-            try:
-                teacher_instance = Teacher.objects.get(teacher_id=order.customer_id)
-                customer_img = teacher_instance.image.url
-            except Teacher.DoesNotExist:
+            if customer.usertype == 'student':
+                customer_instance = customer.student
+                customer_img = customer_instance.profile_picture.url
+            elif customer.usertype == 'teacher':
+                customer_instance = customer.teacher
+                customer_img = customer_instance.profile_picture.url
+            else:
                 raise Http404("User not found")
+        except (Student.DoesNotExist, Teacher.DoesNotExist):
+            raise Http404("User not found")
+
         order_data.append({
             'order': order,
             'customer_img': customer_img,
         })
-    return render(request, 'canteen/orders.html', {'admin_instance': admin_instance, 'order_items': order_data})
 
-@require_POST
-# @login_required
+    context = {'admin_instance': user.admin, 'order_items': order_data}
+    return render(request, 'canteen/orders.html', context)
+
+
 @csrf_protect
 def add_menuItem(request):
     try:
@@ -112,8 +115,8 @@ def add_specialItem(request):
 
         return JsonResponse({'message': 'Special status updated successfully.'})
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
 @csrf_protect
-# @login_required
 def delete_menuItem(request):
     data = json.loads(request.body)
     item_id = data.get('item_id')
@@ -124,7 +127,6 @@ def delete_menuItem(request):
     return JsonResponse({'message': 'Item deleted successfully'})
 
 @csrf_protect
-# @login_required
 def delete_specialItem(request):
     data = json.loads(request.body)
     item_id = data.get('item_id')
@@ -181,7 +183,7 @@ def order_item(request):
     #     return JsonResponse(response_data, status=200)
 
     # return JsonResponse({'message': 'Invalid request method'}, status=400)
-
+@login_required
 def confirm_order(request):
     if request.method == 'POST':
         data = json.loads(request.body)
