@@ -101,15 +101,19 @@
                 <img height="40px" width="40px" src="/media/bell.png" alt=""><span class="span" >2</span>
             </div>
                 <div class="not-box" id="batta">
-                    <div class="text">
-                        Lorem ipsum dolor sit amet 
-                    </div>
-                    <div class="text">
-                        Lorem ipsum dolor sit amet 
-                    </div>
-                    <div class="text">
-                        Lorem ipsum dolor sit amet
-                    </div>
+                    {% if user_type == 'student'%}
+                        {% for notification in student_instance.notifications.all %}
+                            <div class="text">
+                                {{notification.content}} 
+                            </div>
+                        {% endfor %}
+                    {% else if user_type=='' %}
+                        {% for notification in teacher_instance.notifications.all %}
+                            <div class="text">
+                                {{notification.content}} 
+                            </div>
+                        {% endfor %}
+                    {% endif%}
                 </div>
             </div>
         </div>

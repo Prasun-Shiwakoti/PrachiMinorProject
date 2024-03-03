@@ -15,6 +15,15 @@ def validate_user_type(value):
                 params={'value': value},
             )
 
+class Notification(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_seen = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.title
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, usertype=None):
         if not email:
@@ -55,7 +64,6 @@ class Facultysubject(models.Model):
     def __str__(self):
         return f"{self.faculty} - {self.semester}"
 
-
 class Student(models.Model):
     student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -65,6 +73,7 @@ class Student(models.Model):
     semester = models.PositiveSmallIntegerField(validators=[MaxValueValidator(10)])
     faculty=models.ForeignKey(Faculty, on_delete=models.DO_NOTHING)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    notifications = models.ManyToManyField(Notification, related_name='notifications')
     def __str__(self):
         return f"{self.faculty} - {self.name}-{self.semester}"
 
@@ -74,6 +83,7 @@ class Teacher(models.Model):
     name = models.CharField(max_length=100)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     subject =models.ManyToManyField(Subject)
+    notifications = models.ManyToManyField(Notification, related_name='notifications')
 
     def __str__(self):
         return f"{self.subject}-{self.name}"
@@ -84,6 +94,7 @@ class Admin(models.Model):
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=20)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    notifications = models.ManyToManyField(Notification, related_name='notifications')
 
 
     def __str__(self):

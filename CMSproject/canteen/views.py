@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from core.models import Student, Teacher, Admin, Order, MenuItem
+from core.models import Student, Teacher, Admin, Order, MenuItem, Notification
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
@@ -194,10 +194,12 @@ def confirm_order(request):
         try:
             student = Student.objects.get(student_id=UUID(customer_id))
             name=student.name
+            customerObj = student
         except Student.DoesNotExist:
             try:
                 teacher = Teacher.objects.get(teacher_id=UUID(customer_id))
                 name=teacher.name
+                customerObj = teacher
             except Teacher.DoesNotExist:
                 return JsonResponse({'message': 'Customer not found'}, status=404)
         menu_item = get_object_or_404(MenuItem, id=item_id)
@@ -210,5 +212,9 @@ def confirm_order(request):
             status='in-progress',
         )
         order.save()
+        
+        push_notification = Notification.objects.create(title="Order Confirmed", content="Your order of {quantity} {menu_item.name} has been confirmed.")
+        customerObj.notifications.add(push_notification)
+
         return JsonResponse({'message': 'Order confirmed successfully'})    
     return JsonResponse({'message': 'Invalid request method'}, status=400)
